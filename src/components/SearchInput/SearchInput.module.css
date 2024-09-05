@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #266df9;
+  color: #e8e8e8;
+  border-radius: 20px;
+  width: 50px;
+  margin-right: 16px;
+  padding: 4px 0;
+}
+
+.input {
+  border: 1px solid #cac8c8;
+  padding: 4px 8px;
+  border-radius: 20px;
+}

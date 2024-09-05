@@ -1,0 +1,15 @@
+.header {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.logo {
+    text-decoration: none;
+    color: #3796ee;
+    font-weight: 700;
+  }
