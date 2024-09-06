@@ -1,43 +1,40 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router";
-import useFetch from "../../hooks/useFetch";
-import useCache from "../../hooks/useCache";
-import { KEY_PODCASTS } from "../../constants/constants";
-import {
-  normalizeEpisodesData,
-  normalizePodcastsData,
-} from "../../utils/functions";
+import React from "react";
+import { Route, Routes, useParams } from "react-router";
+import Item from "../../components/Item";
+import usePodcastData from "../../hooks/usePodcastData";
+import styles from "./Podcast.module.css";
+import Episodes from "../Episodes";
+import Episode from "../Episode";
 
 const Podcast = () => {
   const { podcastId } = useParams();
-  const { request, fetchStatus } = useFetch();
 
-  const [podcastData, setPodcastData] = useState({});
+  const podcastData = usePodcastData(podcastId);
 
-  const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(
-    `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode`
-  )}`;
+  const hasPodcastData = Object.keys(podcastData).length === 0;
 
-  const fetchPodcasts = useCallback(() => request(url), [request, url]);
+  if (hasPodcastData) {
+    return <div>Podcast data not found.</div>;
+  }
 
-  const cachedData = useCache(`${podcastId}Data`, fetchPodcasts, fetchPodcasts);
+  return (
+    <div className={styles.podcasts}>
+      {podcastData && (
+        <Item
+          id={podcastData.id}
+          author={podcastData.author}
+          name={podcastData.name}
+          image={podcastData.image}
+          description={podcastData.description}
+        />
+      )}
 
-  console.log(normalizeEpisodesData(cachedData?.results));
-  useEffect(() => {
-    const dataPodcasts = JSON.parse(localStorage.getItem(KEY_PODCASTS));
-    if (dataPodcasts) {
-      const normilizedDataPodcast = normalizePodcastsData(
-        dataPodcasts.feed.entry
-      );
-
-      setPodcastData(
-        normilizedDataPodcast.find((item) => {
-          return item.id === podcastId;
-        })
-      );
-    }
-  }, []);
-  return <div>Podcast</div>;
+      <Routes>
+        <Route path="/" element={<Episodes />} />
+        <Route path="episode/:episodeId" element={<Episode />} />
+      </Routes>
+    </div>
+  );
 };
 
 export default Podcast;
