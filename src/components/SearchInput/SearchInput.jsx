@@ -23,10 +23,5 @@ SearchInput.propTypes = {
   podcastCount: PropTypes.number.isRequired,
   keyword: PropTypes.string.isRequired,
 };
-SearchInput.defaultProps = {
-  onKeywordChange: () => {},
-  podcastCount: 0,
-  keyword: "",
-};
 
 export default SearchInput;

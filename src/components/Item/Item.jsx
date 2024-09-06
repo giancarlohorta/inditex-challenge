@@ -23,11 +23,5 @@ Item.propTypes = {
   name: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
 };
-Item.defaultProps = {
-  id: "",
-  image: "",
-  name: "",
-  author: "",
-};
 
 export default Item;

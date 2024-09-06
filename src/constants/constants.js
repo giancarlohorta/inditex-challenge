@@ -7,4 +7,4 @@ export const STATUS_FETCH = {
   ERROR: "error",
 };
 
-export const KEY_PODCASTS = "Podcasts";
+export const KEY_PODCASTS = "podcastsData";

@@ -17,3 +17,25 @@ export const defaultFetchFunction = async (url, options = {}) => {
       };
     });
   };
+
+  export const normalizeEpisodesData = (data) => {
+    return data?.map(
+      ({
+        trackId,
+        trackName,
+        trackTimeMillis,
+        releaseDate,
+        episodeUrl,
+        description,
+      }) => {
+        return {
+          id: trackId,
+          name: trackName,
+          duration: trackTimeMillis,
+          releaseDate,
+          episodeUrl,
+          description,
+        };
+      }
+    );
+  };

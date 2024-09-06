@@ -7,7 +7,4 @@ const Loader = ({ loading }) => {
 Loader.propTypes = {
   loading: PropTypes.bool.isRequired,
 };
-Loader.defaultProps = {
-  loading: false,
-};
 export default Loader;

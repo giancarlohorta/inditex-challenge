@@ -1,17 +1,29 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import { normalizePodcastsData } from "../../utils/functions";
-import { PODCASTS_LIMIT, STATUS_FETCH } from "../../constants/constants";
+import {
+  KEY_PODCASTS,
+  PODCASTS_LIMIT,
+  STATUS_FETCH,
+} from "../../constants/constants";
 import SearchInput from "../../components/SearchInput";
-import Item from "../../components/Item";
+import ItemList from "../../components/ItemList";
+import useCache from "../../hooks/useCache";
 
 const Home = () => {
-  const { data, request, fetchStatus } = useFetch();
+  const { request, fetchStatus } = useFetch();
 
-  const [normalizedData, setNormalizedData] = useState([]);
   const [keyword, setKeyword] = useState("");
 
   const url = `https://itunes.apple.com/us/rss/toppodcasts/limit=${PODCASTS_LIMIT}/genre=1310/json`;
+
+  const fetchPodcasts = useCallback(() => request(url), [request, url]);
+
+  const cachedData = useCache(KEY_PODCASTS, fetchPodcasts, fetchPodcasts);
+
+  const normalizedData = useMemo(() => {
+    return cachedData ? normalizePodcastsData(cachedData.feed.entry) : [];
+  }, [cachedData]);
 
   const handleKeywordChange = (value) => {
     setKeyword(value);
@@ -30,22 +42,11 @@ const Home = () => {
 
   const podcastCount = filteredPodcasts.length;
 
-  useEffect(() => {
-    request(url);
-  }, [url, request]);
-
-  useEffect(() => {
-    if (data) {
-      const normalizedDataPodcasts = normalizePodcastsData(data.feed.entry);
-      setNormalizedData(normalizedDataPodcasts);
-    }
-  }, [data]);
-
-  if (fetchStatus === STATUS_FETCH.LOADING) {
+  if (fetchStatus === STATUS_FETCH.LOADING && !cachedData) {
     return <div>Loading...</div>;
   }
 
-  if (fetchStatus === STATUS_FETCH.ERROR) {
+  if (fetchStatus === STATUS_FETCH.ERROR && !cachedData) {
     return <div>Erro ao carregar podcasts.</div>;
   }
 
@@ -59,15 +60,7 @@ const Home = () => {
       {podcastCount === 0 ? (
         <div>Nenhum podcast encontrado.</div>
       ) : (
-        filteredPodcasts.map((item) => (
-          <Item
-            key={item.id}
-            name={item.name}
-            id={item.id}
-            author={item.author}
-            image={item.image}
-          />
-        ))
+        <ItemList list={filteredPodcasts} />
       )}
     </div>
   );
