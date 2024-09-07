@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { STATUS_FETCH } from "../constants/constants";
 import { defaultFetchFunction } from "../utils/functions";
-import { useLoading } from "../context/LoadingContext";
 
 const useFetch = (fetchFunction = defaultFetchFunction) => {
   const [data, setData] = useState(null);

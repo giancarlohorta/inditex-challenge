@@ -47,7 +47,7 @@ const Home = () => {
   }
 
   if (fetchStatus === STATUS_FETCH.ERROR && !cachedData) {
-    return <div>Erro ao carregar podcasts.</div>;
+    return <div>Error loading podcasts.</div>;
   }
 
   return (
@@ -57,11 +57,7 @@ const Home = () => {
         keyword={keyword}
         podcastCount={podcastCount}
       />
-      {podcastCount === 0 ? (
-        <div>Nenhum podcast encontrado.</div>
-      ) : (
-        <ItemList list={filteredPodcasts} />
-      )}
+      <ItemList list={filteredPodcasts} />
     </div>
   );
 };

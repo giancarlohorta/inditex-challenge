@@ -12,7 +12,6 @@ const SearchInput = ({ onKeywordChange, podcastCount, keyword }) => {
         placeholder="Filter Podcasts..."
         onChange={({ target }) => onKeywordChange(target.value)}
         value={keyword}
-        data-testid="search"
       />
     </div>
   );

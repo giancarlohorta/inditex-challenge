@@ -3,6 +3,10 @@ import Item from "../Item";
 import styles from "./ItemList.module.css";
 
 const ItemList = ({ list }) => {
+  if (!list || list.length === 0) {
+    return <div>No Podcasts found.</div>;
+  }
+
   return (
     <div className={styles.list}>
       {list?.map(({ name, id, author, image }) => {

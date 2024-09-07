@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLoading } from "../context/LoadingContext";
 
-const CACHE_TIME = 24 * 60 * 60 * 1000; // 24 horas em milissegundos
+const CACHE_TIME = 24 * 60 * 60 * 1000;
 
 const useCache = (key, fetchFunction, url) => {
   const { setIsLoading } = useLoading();
@@ -28,6 +28,8 @@ const useCache = (key, fetchFunction, url) => {
 
       try {
         const data = await fetchFunction();
+
+        console.log(data);
         setCachedData(data);
         localStorage.setItem(key, JSON.stringify(data));
         localStorage.setItem(`${key}_date`, new Date().toISOString());

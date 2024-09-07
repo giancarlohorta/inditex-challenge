@@ -1,14 +1,14 @@
 import { render, screen } from "@testing-library/react";
-import Loader from "./Loader";
+import { Loading, NotLoading } from "./Loader.stories";
 
 describe("Loader component", () => {
   it("should render the loader when loading is true", () => {
-    render(<Loader loading />);
+    render(<Loading {...Loading.args} />);
 
     expect(screen.getByTestId("loader")).toBeInTheDocument();
   });
   it("should render the loader when loading is false", () => {
-    render(<Loader loading={false} />);
+    render(<NotLoading {...NotLoading.args} />);
 
     expect(screen.queryByTestId("loader")).not.toBeInTheDocument();
   });

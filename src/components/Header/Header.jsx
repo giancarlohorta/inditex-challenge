@@ -1,4 +1,3 @@
-//import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
 import Loader from "../Loader";
 import styles from "./Header.module.css";
@@ -15,9 +14,5 @@ const Header = () => {
     </div>
   );
 };
-
-//Header.propTypes = {
-//status: PropTypes.bool.isRequired,
-//};
 
 export default Header;

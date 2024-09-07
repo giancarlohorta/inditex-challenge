@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import { createContext, useContext, useState } from "react";
 
-// Criação do contexto
-const LoadingContext = createContext();
+export const LoadingContext = createContext();
 
-// Provider do contexto
 export const LoadingProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
 
