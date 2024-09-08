@@ -29,7 +29,6 @@ describe("Episodes Page", () => {
   });
 
   test("should render episodes and their details correctly", async () => {
-    // Mocking the API response with successful data
     mockAxios.onGet(/lookup/g).reply(200, mockEpisodes);
 
     render(

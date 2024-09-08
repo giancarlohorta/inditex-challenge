@@ -6,6 +6,7 @@ const useEpisodeData = (podcastId, episodeId) => {
 
   useEffect(() => {
     const dataEpisodes = JSON.parse(localStorage.getItem(`${podcastId}Data`));
+
     if (dataEpisodes) {
       const normalizedEpisodes = normalizeEpisodesData(dataEpisodes.results);
       const selectedEpisode = normalizedEpisodes.find(

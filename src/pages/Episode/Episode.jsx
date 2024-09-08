@@ -1,11 +1,10 @@
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import useEpisodeData from "../../hooks/useEpisodeData";
 import styles from "./Episode.module.css";
 
 const Episode = () => {
   const { podcastId, episodeId } = useParams();
   const episodeData = useEpisodeData(podcastId, episodeId);
-
   return (
     <div className={styles.container}>
       <div className={styles.content}>
