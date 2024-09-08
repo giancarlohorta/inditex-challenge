@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useCallback, useState } from "react";
 import { STATUS_FETCH } from "../constants/constants";
 import { defaultFetchFunction } from "../utils/functions";

@@ -28,7 +28,7 @@ Item.propTypes = {
   image: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired
+  description: PropTypes.string
 };
 
 export default Item;

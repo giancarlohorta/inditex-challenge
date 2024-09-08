@@ -26,8 +26,6 @@ const Episodes = () => {
     return episodesData ? normalizeEpisodesData(episodesData?.results)?.slice(1) : [];
   }, [episodesData]);
 
-  console.log(normalizedEpisodesData);
-
   const hasValidDuration = (array) => {
     return array?.some(
       (item) =>

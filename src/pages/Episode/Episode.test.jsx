@@ -27,7 +27,6 @@ describe("Episode Page", () => {
       </MemoryRouter>
     );
 
-    // Verifica se o título do episódio é exibido corretamente
     const episodeTitle = await screen.findByText(mockNormalizedEpisode.name);
     expect(episodeTitle).toBeInTheDocument();
 

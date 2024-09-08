@@ -32,6 +32,7 @@ const useCache = (key, fetchFunction, url) => {
         localStorage.setItem(key, JSON.stringify(data));
         localStorage.setItem(`${key}_date`, new Date().toISOString());
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error("Failed to fetch data", error);
       } finally {
         setIsLoading(false);

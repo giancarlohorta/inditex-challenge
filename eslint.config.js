@@ -5,7 +5,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import jest from "eslint-plugin-jest";
 
 export default [
-  { ignores: ["dist"] },
+  { ignores: ["dist", "coverage"] },
   {
     files: ["**/*.{js,jsx}"],
     languageOptions: {
@@ -31,7 +31,13 @@ export default [
       ...jest.configs.recommended.rules,
       "react/jsx-no-target-blank": "off",
       "react/prop-types": ["off"],
-      "react-hooks/exhaustive-deps": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "no-console": [
+        "error",
+        {
+          allow: ["info"]
+        }
+      ]
     }
   }
 ];
