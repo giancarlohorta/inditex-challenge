@@ -4,13 +4,6 @@ import { MemoryRouter } from "react-router-dom";
 export default {
   title: "Components/Item",
   component: Item,
-  decorators: [
-    (Story) => (
-      <MemoryRouter initialEntries={["/"]}>
-        <Story />
-      </MemoryRouter>
-    ),
-  ],
   argTypes: {
     id: { control: "text" },
     image: { control: "text" },
@@ -20,7 +13,11 @@ export default {
   },
 };
 
-const Template = (args) => <Item {...args} />;
+const Template = (args) => (
+  <MemoryRouter>
+    <Item {...args} />
+  </MemoryRouter>
+);
 
 export const Default = Template.bind({});
 Default.args = {
@@ -39,5 +36,5 @@ WithoutDescription.args = {
     "https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/f2/21/fa/f221fabd-017f-5125-633b-f1fe4f39802a/mza_182995249085044287.jpg/170x170bb.png",
   name: "Another Podcast",
   author: "Jane Doe",
-  description: "", // Sem descrição
+  description: "",
 };

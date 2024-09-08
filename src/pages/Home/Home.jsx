@@ -15,7 +15,7 @@ const Home = () => {
 
   const [keyword, setKeyword] = useState("");
 
-  const url = `https://itunes.apple.com/us/rss/toppodcasts/limit=${PODCASTS_LIMIT}/genre=1310/json`;
+  const url = `https://api.allorigins.win/raw?url=https://itunes.apple.com/us/rss/toppodcasts/limit=${PODCASTS_LIMIT}/genre=1310/json`;
 
   const fetchPodcasts = useCallback(() => request(url), [request, url]);
 

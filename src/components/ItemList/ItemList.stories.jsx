@@ -4,18 +4,14 @@ import { MemoryRouter } from "react-router-dom";
 export default {
   title: "Components/ItemList",
   component: ItemList,
-  decorators: [
-    (Story) => (
-      <MemoryRouter initialEntries={["/"]}>
-        <Story />
-      </MemoryRouter>
-    ),
-  ],
 };
 
-const Template = (args) => <ItemList {...args} />;
+const Template = (args) => (
+  <MemoryRouter>
+    <ItemList {...args} />
+  </MemoryRouter>
+);
 
-// Exemplo de uma lista populada
 export const PopulatedList = Template.bind({});
 PopulatedList.args = {
   list: [

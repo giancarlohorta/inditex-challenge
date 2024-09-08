@@ -14,7 +14,7 @@ export default {
   component: Home,
   decorators: [
     (Story) => (
-      <MemoryRouter initialEntries={["/"]}>
+      <MemoryRouter>
         <LoadingProvider>
           <Story />
         </LoadingProvider>
