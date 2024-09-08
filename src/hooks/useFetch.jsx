@@ -7,7 +7,7 @@ const useFetch = (fetchFunction = defaultFetchFunction) => {
   const [fetchStatus, setFetchStatus] = useState(STATUS_FETCH.INITIAL);
 
   const request = useCallback(
-    (url) => {
+    async (url) => {
       setFetchStatus(STATUS_FETCH.LOADING);
 
       return fetchFunction(url)
@@ -19,7 +19,6 @@ const useFetch = (fetchFunction = defaultFetchFunction) => {
         .catch((error) => {
           setFetchStatus(STATUS_FETCH.ERROR);
           console.error(error);
-          throw error;
         });
     },
     [fetchFunction]

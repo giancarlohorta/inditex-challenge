@@ -8,3 +8,5 @@ export const STATUS_FETCH = {
 };
 
 export const KEY_PODCASTS = "podcastsData";
+
+export const CACHE_TIME = 24 * 60 * 60 * 1000;
