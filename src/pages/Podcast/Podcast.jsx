@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes, useParams } from "react-router";
 import Item from "../../components/Item";
 import usePodcastData from "../../hooks/usePodcastData";

@@ -13,28 +13,21 @@ export const normalizePodcastsData = (data) => {
       author: podcast["im:artist"].label,
       image: podcast["im:image"][2].label,
       name: podcast["im:name"].label,
-      description: podcast.summary.label,
+      description: podcast.summary.label
     };
   });
 };
 
 export const normalizeEpisodesData = (data) => {
   return data?.map(
-    ({
-      trackId,
-      trackName,
-      trackTimeMillis,
-      releaseDate,
-      episodeUrl,
-      description,
-    }) => {
+    ({ trackId, trackName, trackTimeMillis, releaseDate, episodeUrl, description }) => {
       return {
         id: trackId,
         name: trackName,
         duration: trackTimeMillis,
         releaseDate,
         episodeUrl,
-        description,
+        description
       };
     }
   );

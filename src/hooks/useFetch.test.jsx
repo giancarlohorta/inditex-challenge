@@ -31,19 +31,12 @@ describe("useFetch", () => {
   test("should fetch and display data successfully", async () => {
     mockAxios.onGet(mockUrl).reply(200, mockData);
 
-    render(
-      <HookWrapper
-        hook={() => useFetch((url) => axios.get(url))}
-        url={mockUrl}
-      />
-    );
+    render(<HookWrapper hook={() => useFetch((url) => axios.get(url))} url={mockUrl} />);
 
     expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.LOADING);
 
     await waitFor(() => {
-      expect(screen.getByTestId("result").textContent).toEqual(
-        JSON.stringify(mockData)
-      );
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockData));
       expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.DONE);
     });
   });
@@ -56,9 +49,7 @@ describe("useFetch", () => {
     expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.LOADING);
 
     await waitFor(() => {
-      expect(screen.getByTestId("result").textContent).toEqual(
-        JSON.stringify(mockData)
-      );
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockData));
       expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.DONE);
     });
   });
@@ -66,12 +57,7 @@ describe("useFetch", () => {
   test("should handle fetch error and display error status", async () => {
     mockAxios.onGet(mockUrl).reply(500);
 
-    render(
-      <HookWrapper
-        hook={() => useFetch((url) => axios.get(url))}
-        url={mockUrl}
-      />
-    );
+    render(<HookWrapper hook={() => useFetch((url) => axios.get(url))} url={mockUrl} />);
 
     expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.LOADING);
 

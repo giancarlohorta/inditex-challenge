@@ -7,9 +7,7 @@ describe("Item Component", () => {
 
     expect(screen.getByText(Default.args.name)).toBeInTheDocument();
 
-    expect(
-      screen.getByText(`Author: ${Default.args.author}`)
-    ).toBeInTheDocument();
+    expect(screen.getByText(`Author: ${Default.args.author}`)).toBeInTheDocument();
 
     const image = screen.getByAltText(Default.args.name);
     expect(image).toBeInTheDocument();
@@ -23,9 +21,7 @@ describe("Item Component", () => {
 
     expect(screen.getByText(WithoutDescription.args.name)).toBeInTheDocument();
 
-    expect(
-      screen.getByText(`Author: ${WithoutDescription.args.author}`)
-    ).toBeInTheDocument();
+    expect(screen.getByText(`Author: ${WithoutDescription.args.author}`)).toBeInTheDocument();
 
     const image = screen.getByAltText(WithoutDescription.args.name);
     expect(image).toBeInTheDocument();

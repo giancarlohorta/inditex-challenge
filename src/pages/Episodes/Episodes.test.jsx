@@ -9,12 +9,12 @@ import { useLoading } from "../../context/LoadingContext";
 const mockAxios = new MockAdapter(axios);
 
 jest.mock("../../context/LoadingContext", () => ({
-  useLoading: jest.fn(),
+  useLoading: jest.fn()
 }));
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useParams: jest.fn(),
+  useParams: jest.fn()
 }));
 
 describe("Episodes Page", () => {
@@ -42,14 +42,11 @@ describe("Episodes Page", () => {
     expect(episodeCount).toBeInTheDocument();
 
     const episodeLink = await screen.findByRole("link", {
-      name: /S2E1: Confusion/i,
+      name: /S2E1: Confusion/i
     });
 
     expect(episodeLink).toBeInTheDocument();
-    expect(episodeLink).toHaveAttribute(
-      "href",
-      "/podcast/12345/episode/1000668323398"
-    );
+    expect(episodeLink).toHaveAttribute("href", "/podcast/12345/episode/1000668323398");
 
     const episodeDate = screen.getByText("04/09/2024");
     expect(episodeDate).toBeInTheDocument();
@@ -65,8 +62,8 @@ describe("Episodes Page", () => {
       ...mockEpisodes,
       results: mockEpisodes.results.map((episode) => ({
         ...episode,
-        trackTimeMillis: undefined,
-      })),
+        trackTimeMillis: undefined
+      }))
     };
 
     mockAxios.onGet(/lookup/g).reply(200, modifiedMockEpisodes);
@@ -77,15 +74,13 @@ describe("Episodes Page", () => {
       </MemoryRouter>
     );
 
-    await waitFor(() =>
-      expect(screen.queryByText("Duration")).not.toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.queryByText("Duration")).not.toBeInTheDocument());
   });
 
   test("should display message if there aren't episodes", async () => {
     const modifiedMockEpisodes = {
       ...mockEpisodes,
-      results: [],
+      results: []
     };
 
     mockAxios.onGet(/lookup/g).reply(200, modifiedMockEpisodes);
@@ -96,9 +91,7 @@ describe("Episodes Page", () => {
       </MemoryRouter>
     );
 
-    await waitFor(() =>
-      expect(screen.getByText("No episodes available yet.")).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText("No episodes available yet.")).toBeInTheDocument());
   });
 
   test("should show loading state while fetching data", () => {
@@ -123,9 +116,7 @@ describe("Episodes Page", () => {
       </MemoryRouter>
     );
 
-    const errorMessage = await screen.findByText(
-      /Failed to load podcast details/i
-    );
+    const errorMessage = await screen.findByText(/Failed to load podcast details/i);
     expect(errorMessage).toBeInTheDocument();
   });
 });

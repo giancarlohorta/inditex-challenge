@@ -1,7 +1,5 @@
-import React from "react";
 import Home from "./Home";
 import { MemoryRouter } from "react-router-dom";
-import { useState } from "react";
 import { LoadingProvider } from "../../context/LoadingContext";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
@@ -19,8 +17,8 @@ export default {
           <Story />
         </LoadingProvider>
       </MemoryRouter>
-    ),
-  ],
+    )
+  ]
 };
 
 export const DefaultState = () => {

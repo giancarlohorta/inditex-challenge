@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router";
 import useEpisodeData from "../../hooks/useEpisodeData";
 import styles from "./Episode.module.css";
@@ -11,9 +10,7 @@ const Episode = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <h2 className={styles.title}>{episodeData?.name}</h2>
-        <p className={styles.description}>
-          {episodeData?.description || "No Description"}
-        </p>
+        <p className={styles.description}>{episodeData?.description || "No Description"}</p>
       </div>
       <audio
         className={styles.audio}

@@ -9,7 +9,7 @@ import { useLoading } from "../../context/LoadingContext";
 const mockAxios = new MockAdapter(axios);
 
 jest.mock("../../context/LoadingContext", () => ({
-  useLoading: jest.fn(),
+  useLoading: jest.fn()
 }));
 
 describe("Home Page", () => {
@@ -36,16 +36,13 @@ describe("Home Page", () => {
 
     const podcastName = "The Joe Budden Podcast";
     expect(screen.getByText(podcastName)).toBeInTheDocument();
-    expect(screen.getByAltText(podcastName)).toHaveAttribute(
-      "src",
-      mockUrlImage
-    );
+    expect(screen.getByAltText(podcastName)).toHaveAttribute("src", mockUrlImage);
 
     expect(screen.getByText("DISGRACELAND")).toBeInTheDocument();
     expect(screen.getByText(/Double Elvis Productions/)).toBeInTheDocument();
 
     const linkElement = screen.getByRole("link", {
-      name: /Podcast DISGRACELAND by Double Elvis Productions/i,
+      name: /Podcast DISGRACELAND by Double Elvis Productions/i
     });
     expect(linkElement).toBeInTheDocument();
     expect(linkElement).toHaveAttribute("href", "/podcast/1275172907");
@@ -59,8 +56,7 @@ describe("Home Page", () => {
       </MemoryRouter>
     );
 
-    const filterInput =
-      await screen.findByPlaceholderText("Filter Podcasts...");
+    const filterInput = await screen.findByPlaceholderText("Filter Podcasts...");
     expect(filterInput).toBeInTheDocument();
 
     fireEvent.change(filterInput, { target: { value: "Budden" } });
@@ -77,8 +73,7 @@ describe("Home Page", () => {
       </MemoryRouter>
     );
 
-    const filterInput =
-      await screen.findByPlaceholderText("Filter Podcasts...");
+    const filterInput = await screen.findByPlaceholderText("Filter Podcasts...");
     expect(filterInput).toBeInTheDocument();
 
     fireEvent.change(filterInput, { target: { value: "" } });
@@ -108,9 +103,7 @@ describe("Home Page", () => {
       </MemoryRouter>
     );
 
-    expect(
-      await screen.findByText("Error loading podcasts.")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Error loading podcasts.")).toBeInTheDocument();
   });
 
   test("should show message when there aren't podcasts", async () => {

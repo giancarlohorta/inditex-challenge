@@ -4,7 +4,7 @@ export const STATUS_FETCH = {
   INITIAL: "initial",
   LOADING: "loading",
   DONE: "done",
-  ERROR: "error",
+  ERROR: "error"
 };
 
 export const KEY_PODCASTS = "podcastsData";

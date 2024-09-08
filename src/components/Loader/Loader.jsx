@@ -5,6 +5,6 @@ const Loader = ({ loading }) => {
   return loading && <div data-testid="loader" className={styles.loader}></div>;
 };
 Loader.propTypes = {
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 export default Loader;

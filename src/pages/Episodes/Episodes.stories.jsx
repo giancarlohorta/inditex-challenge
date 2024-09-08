@@ -1,4 +1,3 @@
-import React from "react";
 import Episodes from "./Episodes";
 import { MemoryRouter } from "react-router-dom";
 import { LoadingProvider } from "../../context/LoadingContext";
@@ -21,7 +20,7 @@ const withProviders = (Story) => (
 export default {
   title: "Pages/Episodes",
   component: Episodes,
-  decorators: [withProviders],
+  decorators: [withProviders]
 };
 
 export const DefaultState = () => {

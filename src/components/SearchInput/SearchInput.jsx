@@ -20,7 +20,7 @@ const SearchInput = ({ onKeywordChange, podcastCount, keyword }) => {
 SearchInput.propTypes = {
   onKeywordChange: PropTypes.func.isRequired,
   podcastCount: PropTypes.number.isRequired,
-  keyword: PropTypes.string.isRequired,
+  keyword: PropTypes.string.isRequired
 };
 
 export default SearchInput;

@@ -14,7 +14,7 @@ export const LoadingProvider = ({ children }) => {
 };
 
 LoadingProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 };
 
 export const useLoading = () => useContext(LoadingContext);

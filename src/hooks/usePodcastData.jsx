@@ -9,9 +9,7 @@ const usePodcastData = (podcastId) => {
     const dataPodcasts = JSON.parse(localStorage.getItem(KEY_PODCASTS));
     if (dataPodcasts) {
       const normalizedPodcasts = normalizePodcastsData(dataPodcasts.feed.entry);
-      const selectedPodcast = normalizedPodcasts.find(
-        (item) => item.id === podcastId
-      );
+      const selectedPodcast = normalizedPodcasts.find((item) => item.id === podcastId);
       setPodcastData(selectedPodcast || {});
     }
   }, [podcastId]);

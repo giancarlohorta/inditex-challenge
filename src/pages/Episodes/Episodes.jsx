@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Link, useParams } from "react-router-dom";
 import {
   formatReleaseDate,
   millisToHoursMinutesAndSeconds,
-  normalizeEpisodesData,
+  normalizeEpisodesData
 } from "../../utils/functions";
 import useFetch from "../../hooks/useFetch";
 import { useCallback, useMemo } from "react";
@@ -19,28 +18,20 @@ const Episodes = () => {
     `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode`
   )}`;
 
-  const fetchEpisodes = useCallback(
-    () => request(episodesUrl),
-    [request, episodesUrl]
-  );
+  const fetchEpisodes = useCallback(() => request(episodesUrl), [request, episodesUrl]);
 
-  const episodesData = useCache(
-    `${podcastId}Data`,
-    fetchEpisodes,
-    fetchEpisodes
-  );
+  const episodesData = useCache(`${podcastId}Data`, fetchEpisodes, fetchEpisodes);
 
   const normalizedEpisodesData = useMemo(() => {
-    return episodesData
-      ? normalizeEpisodesData(episodesData?.results)?.slice(1)
-      : [];
+    return episodesData ? normalizeEpisodesData(episodesData?.results)?.slice(1) : [];
   }, [episodesData]);
 
   console.log(normalizedEpisodesData);
 
   const hasValidDuration = (array) => {
     return array?.some(
-      (item) => item.hasOwnProperty("duration") && item.duration !== undefined
+      (item) =>
+        Object.prototype.hasOwnProperty.call(item, "duration") && item.duration !== undefined
     );
   };
 
@@ -61,9 +52,7 @@ const Episodes = () => {
   return (
     <div className={styles.content}>
       <div className={styles.counter}>
-        <p className={styles["counter-text"]}>
-          Episodes: {normalizedEpisodesData?.length}
-        </p>
+        <p className={styles["counter-text"]}>Episodes: {normalizedEpisodesData?.length}</p>
       </div>
 
       <table className={styles.table}>
@@ -75,23 +64,17 @@ const Episodes = () => {
           </tr>
         </thead>
         <tbody>
-          {normalizedEpisodesData?.map(
-            ({ name, duration, releaseDate, id }) => {
-              return (
-                <tr key={id}>
-                  <th>
-                    <Link to={`/podcast/${podcastId}/episode/${id}`}>
-                      {name}
-                    </Link>
-                  </th>
-                  <th>{formatReleaseDate(releaseDate)}</th>
-                  {duration && (
-                    <th>{millisToHoursMinutesAndSeconds(duration)}</th>
-                  )}
-                </tr>
-              );
-            }
-          )}
+          {normalizedEpisodesData?.map(({ name, duration, releaseDate, id }) => {
+            return (
+              <tr key={id}>
+                <th>
+                  <Link to={`/podcast/${podcastId}/episode/${id}`}>{name}</Link>
+                </th>
+                <th>{formatReleaseDate(releaseDate)}</th>
+                {duration && <th>{millisToHoursMinutesAndSeconds(duration)}</th>}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

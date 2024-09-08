@@ -9,8 +9,8 @@ export default {
     image: { control: "text" },
     name: { control: "text" },
     author: { control: "text" },
-    description: { control: "text" },
-  },
+    description: { control: "text" }
+  }
 };
 
 const Template = (args) => (
@@ -26,7 +26,7 @@ Default.args = {
     "https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/f2/21/fa/f221fabd-017f-5125-633b-f1fe4f39802a/mza_182995249085044287.jpg/170x170bb.png",
   name: "Sample Podcast",
   author: "John Doe",
-  description: "This is a description of the sample podcast.",
+  description: "This is a description of the sample podcast."
 };
 
 export const WithoutDescription = Template.bind({});
@@ -36,5 +36,5 @@ WithoutDescription.args = {
     "https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/f2/21/fa/f221fabd-017f-5125-633b-f1fe4f39802a/mza_182995249085044287.jpg/170x170bb.png",
   name: "Another Podcast",
   author: "Jane Doe",
-  description: "",
+  description: ""
 };

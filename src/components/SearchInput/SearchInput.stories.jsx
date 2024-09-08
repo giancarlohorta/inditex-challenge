@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SearchInput from "./SearchInput";
 
 export default {
   title: "Components/SearchInput",
-  component: SearchInput,
+  component: SearchInput
 };
 
 const Template = (args) => {
@@ -13,17 +13,11 @@ const Template = (args) => {
     setKeyword(newKeyword);
   };
 
-  return (
-    <SearchInput
-      {...args}
-      onKeywordChange={handleKeywordChange}
-      keyword={keyword}
-    />
-  );
+  return <SearchInput {...args} onKeywordChange={handleKeywordChange} keyword={keyword} />;
 };
 
 export const Default = Template.bind({});
 Default.args = {
   podcastCount: 42,
-  keyword: "",
+  keyword: ""
 };

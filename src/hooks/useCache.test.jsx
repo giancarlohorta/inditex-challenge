@@ -4,7 +4,7 @@ import { useLoading } from "../context/LoadingContext";
 import { CACHE_TIME } from "../constants/constants";
 
 jest.mock("../context/LoadingContext", () => ({
-  useLoading: jest.fn(),
+  useLoading: jest.fn()
 }));
 
 const HookWrapper = ({ hook }) => {
@@ -29,16 +29,12 @@ describe("useCache", () => {
   test("should fetch and store data if no cache exists", async () => {
     mockFetchFunction.mockResolvedValue(mockData);
 
-    render(
-      <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />
-    );
+    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
 
     expect(setIsLoading).toHaveBeenCalledWith(true);
 
     await waitFor(() => {
-      expect(screen.getByTestId("result").textContent).toEqual(
-        JSON.stringify(mockData)
-      );
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockData));
     });
     expect(mockFetchFunction).toHaveBeenCalledTimes(1);
 
@@ -51,13 +47,9 @@ describe("useCache", () => {
     localStorage.setItem(key, JSON.stringify(mockData));
     localStorage.setItem(`${key}_date`, new Date().toISOString());
 
-    render(
-      <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />
-    );
+    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
 
-    expect(screen.getByTestId("result").textContent).toEqual(
-      JSON.stringify(mockData)
-    );
+    expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockData));
 
     expect(mockFetchFunction).not.toHaveBeenCalled();
 
@@ -73,16 +65,12 @@ describe("useCache", () => {
     const newMockData = { data: "newData" };
     mockFetchFunction.mockResolvedValue(newMockData);
 
-    render(
-      <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />
-    );
+    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
 
     expect(setIsLoading).toHaveBeenCalledWith(true);
 
     await waitFor(() => {
-      expect(screen.getByTestId("result").textContent).toEqual(
-        JSON.stringify(newMockData)
-      );
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(newMockData));
     });
 
     expect(mockFetchFunction).toHaveBeenCalledTimes(1);
@@ -95,9 +83,7 @@ describe("useCache", () => {
   test("should handle fetch error", async () => {
     mockFetchFunction.mockRejectedValue(new Error("Fetch failed"));
 
-    render(
-      <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />
-    );
+    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
 
     expect(setIsLoading).toHaveBeenCalledWith(true);
 
