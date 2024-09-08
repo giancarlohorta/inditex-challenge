@@ -1,4 +1,5 @@
 import axios from "axios";
+import { format } from "date-fns";
 
 export const defaultFetchFunction = async (url, options = {}) => {
   const response = await axios.get(url, options);
@@ -51,3 +52,5 @@ export const millisToHoursMinutesAndSeconds = (millis) => {
     ? `${hours}:${formattedMinutes}:${formattedSeconds}`
     : `${formattedMinutes}:${formattedSeconds}`;
 };
+
+export const formatReleaseDate = (date) => format(date, "dd/MM/yyyy");

@@ -30,13 +30,6 @@ export const DefaultState = () => {
   return <Home />;
 };
 
-export const LoadingState = () => {
-  window.localStorage.clear();
-  mockAxios.onGet(/toppodcasts/g).timeout();
-
-  return <Home />;
-};
-
 export const ErrorState = () => {
   window.localStorage.clear();
   mockAxios.onGet(/toppodcasts/g).reply(500);

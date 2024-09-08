@@ -5,7 +5,6 @@ import useFetch from "./useFetch";
 import { STATUS_FETCH } from "../constants/constants";
 import { useEffect } from "react";
 
-// Criando um mock do axios
 const mockAxios = new MockAdapter(axios);
 
 const HookWrapper = ({ hook, url }) => {

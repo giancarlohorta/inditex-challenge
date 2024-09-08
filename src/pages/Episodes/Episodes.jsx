@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link, useParams } from "react-router-dom";
-import { PropTypes } from "prop-types";
-import styles from "./Episodes.module.css";
 import {
+  formatReleaseDate,
   millisToHoursMinutesAndSeconds,
   normalizeEpisodesData,
 } from "../../utils/functions";
@@ -10,22 +9,42 @@ import useFetch from "../../hooks/useFetch";
 import { useCallback, useMemo } from "react";
 import useCache from "../../hooks/useCache";
 import { STATUS_FETCH } from "../../constants/constants";
+import styles from "./Episodes.module.css";
 
 const Episodes = () => {
   const { podcastId } = useParams();
   const { request, fetchStatus } = useFetch();
 
-  const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+  const episodesUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
     `https://itunes.apple.com/lookup?id=${podcastId}&media=podcast&entity=podcastEpisode`
   )}`;
 
-  const fetchPodcasts = useCallback(() => request(url), [request, url]);
+  const fetchEpisodes = useCallback(
+    () => request(episodesUrl),
+    [request, episodesUrl]
+  );
 
-  const cachedData = useCache(`${podcastId}Data`, fetchPodcasts, fetchPodcasts);
+  const episodesData = useCache(
+    `${podcastId}Data`,
+    fetchEpisodes,
+    fetchEpisodes
+  );
 
   const normalizedEpisodesData = useMemo(() => {
-    return normalizeEpisodesData(cachedData?.results)?.slice(1);
-  }, [cachedData]);
+    return episodesData
+      ? normalizeEpisodesData(episodesData?.results)?.slice(1)
+      : [];
+  }, [episodesData]);
+
+  console.log(normalizedEpisodesData);
+
+  const hasValidDuration = (array) => {
+    return array?.some(
+      (item) => item.hasOwnProperty("duration") && item.duration !== undefined
+    );
+  };
+
+  const isEpisodesEmpty = normalizedEpisodesData?.length === 0;
 
   if (fetchStatus === STATUS_FETCH.LOADING) {
     return <div>Loading podcast details...</div>;
@@ -33,6 +52,10 @@ const Episodes = () => {
 
   if (fetchStatus === STATUS_FETCH.ERROR) {
     return <div>Failed to load podcast details. Please try again later.</div>;
+  }
+
+  if (isEpisodesEmpty) {
+    return <div>No episodes available yet.</div>;
   }
 
   return (
@@ -48,38 +71,31 @@ const Episodes = () => {
           <tr>
             <th>Title</th>
             <th>Date</th>
-            <th>Duration</th>
+            {hasValidDuration(normalizedEpisodesData) && <th>Duration</th>}
           </tr>
         </thead>
         <tbody>
           {normalizedEpisodesData?.map(
-            ({ name, duration, releaseDate, id }) => (
-              <tr key={id}>
-                <th>
-                  <Link to={`/podcast/${podcastId}/episode/${id}`}>{name}</Link>
-                </th>
-                <th>{new Date(releaseDate).toISOString().substring(0, 10)}</th>
-                <th>{millisToHoursMinutesAndSeconds(duration)}</th>
-              </tr>
-            )
+            ({ name, duration, releaseDate, id }) => {
+              return (
+                <tr key={id}>
+                  <th>
+                    <Link to={`/podcast/${podcastId}/episode/${id}`}>
+                      {name}
+                    </Link>
+                  </th>
+                  <th>{formatReleaseDate(releaseDate)}</th>
+                  {duration && (
+                    <th>{millisToHoursMinutesAndSeconds(duration)}</th>
+                  )}
+                </tr>
+              );
+            }
           )}
         </tbody>
       </table>
     </div>
   );
-};
-Episodes.propTypes = {
-  dataEpisodes: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      duration: PropTypes.number,
-      description: PropTypes.string,
-      episodeUrl: PropTypes.string,
-      releaseDate: PropTypes.string,
-    })
-  ),
-  podcastId: PropTypes.string,
 };
 
 export default Episodes;

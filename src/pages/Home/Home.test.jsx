@@ -1,38 +1,30 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Home from "./Home";
 import { mockPodcasts, mockUrlImage } from "../../mocks";
-import useCache from "../../hooks/useCache";
-import useFetch from "../../hooks/useFetch";
-import { STATUS_FETCH } from "../../constants/constants";
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
+import { useLoading } from "../../context/LoadingContext";
 
-jest.mock("../../hooks/useCache", () => ({
-  __esModule: true,
-  default: jest.fn(),
-}));
-jest.mock("../../hooks/useFetch", () => ({
-  __esModule: true,
-  default: jest.fn(),
+const mockAxios = new MockAdapter(axios);
+
+jest.mock("../../context/LoadingContext", () => ({
+  useLoading: jest.fn(),
 }));
 
-const request = jest.fn();
-
-describe("Home Component", () => {
+describe("Home Page", () => {
+  let setIsLoading;
   beforeEach(() => {
-    useCache.mockImplementation(() => mockPodcasts);
-    useFetch.mockImplementation(() => {
-      return {
-        data: null,
-        request: request,
-      };
-    });
-  });
+    mockAxios.reset();
 
-  afterEach(() => {
-    jest.clearAllMocks();
+    setIsLoading = jest.fn();
+    useLoading.mockReturnValue({ setIsLoading });
+
+    localStorage.clear();
   });
 
   test("should render podcasts and their details correctly", async () => {
+    mockAxios.onGet(/toppodcasts/g).reply(200, mockPodcasts);
     render(
       <MemoryRouter>
         <Home />
@@ -60,6 +52,7 @@ describe("Home Component", () => {
   });
 
   test("should filter podcasts based on user input", async () => {
+    mockAxios.onGet(/toppodcasts/g).reply(200, mockPodcasts);
     render(
       <MemoryRouter>
         <Home />
@@ -77,6 +70,7 @@ describe("Home Component", () => {
   });
 
   test("should handle empty filter input", async () => {
+    mockAxios.onGet(/toppodcasts/g).reply(200, mockPodcasts);
     render(
       <MemoryRouter>
         <Home />
@@ -94,12 +88,7 @@ describe("Home Component", () => {
   });
 
   test("should show loading state", async () => {
-    useCache.mockImplementation(() => null);
-    useFetch.mockImplementation(() => ({
-      data: null,
-      request: jest.fn(),
-      fetchStatus: STATUS_FETCH.LOADING,
-    }));
+    mockAxios.onGet(/toppodcasts/g).reply(200, mockPodcasts);
 
     render(
       <MemoryRouter>
@@ -111,12 +100,7 @@ describe("Home Component", () => {
   });
 
   test("should show error state", async () => {
-    useCache.mockImplementation(() => null);
-    useFetch.mockImplementation(() => ({
-      data: null,
-      request: jest.fn(),
-      fetchStatus: STATUS_FETCH.ERROR,
-    }));
+    mockAxios.onGet(/toppodcasts/g).reply(500, null);
 
     render(
       <MemoryRouter>
@@ -124,20 +108,13 @@ describe("Home Component", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("Error loading podcasts.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("Error loading podcasts.")
+    ).toBeInTheDocument();
   });
 
   test("should show message when there aren't podcasts", async () => {
-    useCache.mockImplementation(() => ({
-      feed: {
-        entry: [],
-      },
-    }));
-    useFetch.mockImplementation(() => ({
-      data: null,
-      request: jest.fn(),
-      fetchStatus: STATUS_FETCH.ERROR,
-    }));
+    mockAxios.onGet(/toppodcasts/g).reply(200, { feed: { entry: [] } });
 
     render(
       <MemoryRouter>
@@ -145,6 +122,6 @@ describe("Home Component", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText("No Podcasts found.")).toBeInTheDocument();
+    expect(await screen.findByText("No Podcasts found.")).toBeInTheDocument();
   });
 });
