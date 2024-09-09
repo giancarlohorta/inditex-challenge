@@ -10,11 +10,12 @@ const HookWrapper = ({ hook }) => {
 describe("useEpisodeData", () => {
   const podcastId = "1234";
   const episodeId = "1000659456383";
+
   beforeEach(() => {
     localStorage.clear();
   });
 
-  test("should fetch and store data if no cache exists", async () => {
+  test("should return normalized data from cache if cache exists", async () => {
     localStorage.setItem(`${podcastId}Data`, JSON.stringify(mockEpisodes));
     render(<HookWrapper hook={() => useEpisodeData(podcastId, episodeId)} />);
 
@@ -24,6 +25,7 @@ describe("useEpisodeData", () => {
       );
     });
   });
+
   test("should return empty object when localStorage has no data", async () => {
     render(<HookWrapper hook={() => useEpisodeData(podcastId, episodeId)} />);
 
@@ -31,6 +33,7 @@ describe("useEpisodeData", () => {
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
     });
   });
+
   test("should return empty object if episode is not found in the normalized data", async () => {
     localStorage.setItem(
       `${podcastId}Data`,
@@ -47,5 +50,16 @@ describe("useEpisodeData", () => {
     await waitFor(() => {
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
     });
+  });
+  test("should handle JSON parsing errors", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    localStorage.setItem(`${podcastId}Data`, "{ invalid json ");
+
+    render(<HookWrapper hook={() => useEpisodeData(podcastId, episodeId)} />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
+    });
+    consoleSpy.mockRestore();
   });
 });

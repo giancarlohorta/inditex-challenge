@@ -37,7 +37,7 @@ describe("Episodes Page", () => {
       </MemoryRouter>
     );
 
-    const episodeCount = await screen.findByText(/Episodes: 12/i);
+    const episodeCount = await screen.findByText(/Episodes: 13/i);
     expect(episodeCount).toBeInTheDocument();
 
     const episodeLink = await screen.findByRole("link", {
@@ -47,8 +47,8 @@ describe("Episodes Page", () => {
     expect(episodeLink).toBeInTheDocument();
     expect(episodeLink).toHaveAttribute("href", "/podcast/12345/episode/1000668323398");
 
-    const episodeDate = screen.getByText("04/09/2024");
-    expect(episodeDate).toBeInTheDocument();
+    const episodeDate = screen.getAllByText("04/09/2024");
+    expect(episodeDate[0]).toBeInTheDocument();
 
     const episodeDuration = screen.getByText("41:52");
     expect(episodeDuration).toBeInTheDocument();
@@ -94,7 +94,7 @@ describe("Episodes Page", () => {
   });
 
   test("should show loading state while fetching data", () => {
-    mockAxios.onGet(/lookup/g).reply(() => new Promise(() => {})); // Simulate pending request
+    mockAxios.onGet(/lookup/g).reply(() => new Promise(() => {}));
 
     render(
       <MemoryRouter>
@@ -106,6 +106,8 @@ describe("Episodes Page", () => {
   });
 
   test("should display error message on fetch failure", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+
     mockAxios.onGet(/lookup/g).reply(500);
 
     render(
@@ -116,5 +118,7 @@ describe("Episodes Page", () => {
 
     const errorMessage = await screen.findByText(/Failed to load podcast details/i);
     expect(errorMessage).toBeInTheDocument();
+
+    consoleSpy.mockRestore();
   });
 });

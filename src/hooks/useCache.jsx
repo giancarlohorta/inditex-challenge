@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoading } from "../context/LoadingContext";
-import { CACHE_TIME } from "../constants/constants";
+import { getStoredData, isCacheValid, saveToCache } from "../utils/functions";
 
 const useCache = (key, fetchFunction, url) => {
   const { setIsLoading } = useLoading();
@@ -9,28 +9,18 @@ const useCache = (key, fetchFunction, url) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const storedData = localStorage.getItem(key);
-      const storedDate = localStorage.getItem(`${key}_date`);
+      const { storedData, storedDate } = getStoredData(key);
 
-      if (storedData && storedDate) {
-        const parsedDate = new Date(storedDate);
-        const currentDate = new Date();
-        const timeDifference = currentDate - parsedDate;
-
-        if (timeDifference < CACHE_TIME) {
-          setIsLoading(false);
-          setCachedData(JSON.parse(storedData));
-
-          return;
-        }
+      if (storedData && storedDate && isCacheValid(storedDate)) {
+        setIsLoading(false);
+        setCachedData(JSON.parse(storedData));
+        return;
       }
 
       try {
         const data = await fetchFunction();
-
         setCachedData(data);
-        localStorage.setItem(key, JSON.stringify(data));
-        localStorage.setItem(`${key}_date`, new Date().toISOString());
+        saveToCache(key, data);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error("Failed to fetch data", error);

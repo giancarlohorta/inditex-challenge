@@ -11,13 +11,17 @@ const Episode = () => {
         <h2 className={styles.title}>{episodeData?.name}</h2>
         <p className={styles.description}>{episodeData?.description || "No Description"}</p>
       </div>
-      <audio
-        className={styles.audio}
-        controls
-        aria-label="Audio Player"
-        role="region"
-        src={episodeData?.episodeUrl}
-      />
+      {episodeData?.episodeUrl ? (
+        <audio
+          className={styles.audio}
+          controls
+          aria-label="Audio Player"
+          role="region"
+          src={episodeData?.episodeUrl}
+        />
+      ) : (
+        <p>Audio unavailable</p>
+      )}
     </div>
   );
 };

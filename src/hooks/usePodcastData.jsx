@@ -6,12 +6,19 @@ const usePodcastData = (podcastId) => {
   const [podcastData, setPodcastData] = useState({});
 
   useEffect(() => {
-    const dataPodcasts = JSON.parse(localStorage.getItem(KEY_PODCASTS));
+    try {
+      const dataPodcasts = JSON.parse(localStorage.getItem(KEY_PODCASTS));
 
-    if (dataPodcasts) {
-      const normalizedPodcasts = normalizePodcastsData(dataPodcasts.feed.entry);
-      const selectedPodcast = normalizedPodcasts.find((item) => item.id === podcastId);
-      setPodcastData(selectedPodcast || {});
+      if (dataPodcasts) {
+        const normalizedPodcasts = normalizePodcastsData(dataPodcasts.feed.entry);
+
+        const selectedPodcast = normalizedPodcasts.find((item) => item.id === podcastId);
+        setPodcastData(selectedPodcast || {});
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error("Error retrieving or processing podcast data from localStorage:", error);
+      setPodcastData({});
     }
   }, [podcastId]);
 

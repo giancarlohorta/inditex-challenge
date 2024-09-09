@@ -14,7 +14,7 @@ const Item = ({ id, image, name, author, description }) => {
       <h2 className={styles.title}>{name}</h2>
       <p className={styles.author}>Author: {author}</p>
       {description && (
-        <div>
+        <div className={styles.description}>
           <p className={styles["description-title"]}>Descrition:</p>
           <p className={styles["description-text"]}>{description}</p>
         </div>

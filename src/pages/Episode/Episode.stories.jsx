@@ -16,20 +16,25 @@ export default {
   }
 };
 
-const Template = (args) => {
+const setupLocalStorage = (podcastId, episodeData) => {
   localStorage.clear();
-  localStorage.setItem(`${args.podcastId}Data`, JSON.stringify(mockEpisodes));
-  return (
-    <MemoryRouter initialEntries={[`/podcast/${args.podcastId}/episode/${args.episodeId}`]}>
-      <Routes>
-        <Route path="/podcast/:podcastId/episode/:episodeId" element={<Episode />} />
-      </Routes>
-    </MemoryRouter>
-  );
+  localStorage.setItem(`${podcastId}Data`, JSON.stringify(episodeData));
+};
+
+const renderWithRouter = (podcastId, episodeId) => (
+  <MemoryRouter initialEntries={[`/podcast/${podcastId}/episode/${episodeId}`]}>
+    <Routes>
+      <Route path="/podcast/:podcastId/episode/:episodeId" element={<Episode />} />
+    </Routes>
+  </MemoryRouter>
+);
+
+const Template = (args) => {
+  setupLocalStorage(args.podcastId, mockEpisodes);
+  return renderWithRouter(args.podcastId, args.episodeId);
 };
 
 const TemplateWithoutDescription = (args) => {
-  localStorage.clear();
   const mockWithoutDescription = {
     ...mockEpisodes.results.find(({ trackId }) => trackId === Number(args.episodeId)),
     description: ""
@@ -42,15 +47,8 @@ const TemplateWithoutDescription = (args) => {
     ]
   };
 
-  localStorage.setItem(`${args.podcastId}Data`, JSON.stringify(mockEpisodesNoDescription));
-
-  return (
-    <MemoryRouter initialEntries={[`/podcast/${args.podcastId}/episode/${args.episodeId}`]}>
-      <Routes>
-        <Route path="/podcast/:podcastId/episode/:episodeId" element={<Episode />} />
-      </Routes>
-    </MemoryRouter>
-  );
+  setupLocalStorage(args.podcastId, mockEpisodesNoDescription);
+  return renderWithRouter(args.podcastId, args.episodeId);
 };
 
 export const Default = Template.bind({});

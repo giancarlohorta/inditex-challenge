@@ -24,11 +24,11 @@ const Episodes = () => {
 
   const normalizedEpisodesData = useMemo(() => {
     return episodesData && episodesData?.results?.length > 0
-      ? normalizeEpisodesData(episodesData?.results)?.slice(1)
+      ? normalizeEpisodesData(episodesData?.results)
       : [];
   }, [episodesData]);
 
-  const hasValidDuration = (array) => {
+  const shouldShowDurationColumn = (array) => {
     return array?.some(
       (item) =>
         Object.prototype.hasOwnProperty.call(item, "duration") && item.duration !== undefined
@@ -60,7 +60,7 @@ const Episodes = () => {
           <tr>
             <th>Title</th>
             <th>Date</th>
-            {hasValidDuration(normalizedEpisodesData) && <th>Duration</th>}
+            {shouldShowDurationColumn(normalizedEpisodesData) && <th>Duration</th>}
           </tr>
         </thead>
         <tbody>

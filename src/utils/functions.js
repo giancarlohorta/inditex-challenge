@@ -1,5 +1,6 @@
 import axios from "axios";
 import { format } from "date-fns";
+import { CACHE_TIME } from "../constants/constants";
 
 export const defaultFetchFunction = async (url, options = {}) => {
   const response = await axios.get(url, options);
@@ -47,3 +48,21 @@ export const millisToHoursMinutesAndSeconds = (millis) => {
 };
 
 export const formatReleaseDate = (date) => format(date, "dd/MM/yyyy");
+
+export const getStoredData = (key) => {
+  const storedData = localStorage.getItem(key);
+  const storedDate = localStorage.getItem(`${key}_date`);
+  return { storedData, storedDate };
+};
+
+export const isCacheValid = (storedDate) => {
+  const parsedDate = new Date(storedDate);
+  const currentDate = new Date();
+  const timeDifference = currentDate - parsedDate;
+  return timeDifference < CACHE_TIME;
+};
+
+export const saveToCache = (key, data) => {
+  localStorage.setItem(key, JSON.stringify(data));
+  localStorage.setItem(`${key}_date`, new Date().toISOString());
+};

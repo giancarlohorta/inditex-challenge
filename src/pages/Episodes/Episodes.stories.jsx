@@ -39,6 +39,14 @@ export const DefaultState = () => {
   return <Episodes />;
 };
 
+DefaultState.parameters = {
+  docs: {
+    description: {
+      story: "Displays the list of episodes with data fetched successfully."
+    }
+  }
+};
+
 export const ErrorState = () => {
   window.localStorage.clear();
   const mockAxios = createMockAxios();
@@ -48,6 +56,14 @@ export const ErrorState = () => {
   return <Episodes />;
 };
 
+ErrorState.parameters = {
+  docs: {
+    description: {
+      story: "Displays an error message when the data fetch fails."
+    }
+  }
+};
+
 export const EmptyState = () => {
   window.localStorage.clear();
   const mockAxios = createMockAxios();
@@ -55,4 +71,12 @@ export const EmptyState = () => {
   mockAxios.onGet(/lookup/g).reply(200, { results: [] });
 
   return <Episodes />;
+};
+
+EmptyState.parameters = {
+  docs: {
+    description: {
+      story: "Displays a message indicating no episodes are available."
+    }
+  }
 };

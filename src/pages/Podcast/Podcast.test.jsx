@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor, act } from "@testing-library/react";
 import { MemoryRouter, Route, Routes, useParams } from "react-router-dom";
 import Podcast from "./Podcast";
 import { KEY_PODCASTS } from "../../constants/constants";
@@ -22,6 +22,16 @@ jest.mock("../../context/LoadingContext", () => ({
   useLoading: jest.fn()
 }));
 
+const renderPodcast = (path) => {
+  render(
+    <MemoryRouter initialEntries={[path]}>
+      <Routes>
+        <Route path="/podcast/:podcastId/*" element={<Podcast />} />
+      </Routes>
+    </MemoryRouter>
+  );
+};
+
 describe("Podcast Page", () => {
   const podcastId = "1535809341";
   const episodeId = "1000659456383";
@@ -37,60 +47,56 @@ describe("Podcast Page", () => {
   test("should display podcast data and podcast episodes", async () => {
     localStorage.setItem(KEY_PODCASTS, JSON.stringify(mockPodcasts));
     mockAxios.onGet(/lookup/g).reply(200, mockEpisodes);
-    render(
-      <MemoryRouter initialEntries={["/podcast/1535809341"]}>
-        <Routes>
-          <Route path="/podcast/:podcastId/*" element={<Podcast />} />
-        </Routes>
-      </MemoryRouter>
-    );
 
-    expect(await screen.findByText("The Joe Budden Podcast")).toBeInTheDocument();
-    expect(screen.getByText(/The Joe Budden Network/i)).toBeInTheDocument();
-    expect(screen.getByText(/Tune into Joe Budden and his friends./i)).toBeInTheDocument();
-
-    const image = screen.getByAltText("The Joe Budden Podcast");
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", mockNormalizedPodcast.image);
-
-    const linkElement = screen.getByRole("link", {
-      name: /The Joe Budden Network/i
+    await act(async () => {
+      renderPodcast(`/podcast/${podcastId}`);
     });
 
-    expect(linkElement).toBeInTheDocument();
-    expect(linkElement).toHaveAttribute("href", "/podcast/1535809341");
+    await waitFor(() => {
+      expect(screen.getByText("The Joe Budden Podcast")).toBeInTheDocument();
+      expect(screen.getByText(/The Joe Budden Network/i)).toBeInTheDocument();
+      expect(screen.getByText(/Tune into Joe Budden and his friends./i)).toBeInTheDocument();
 
-    const episodeCount = await screen.findByText(/Episodes: 12/i);
-    expect(episodeCount).toBeInTheDocument();
+      const image = screen.getByAltText("The Joe Budden Podcast");
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute("src", mockNormalizedPodcast.image);
+
+      const linkElement = screen.getByRole("link", {
+        name: /The Joe Budden Network/i
+      });
+
+      expect(linkElement).toBeInTheDocument();
+      expect(linkElement).toHaveAttribute("href", `/podcast/${podcastId}`);
+
+      expect(screen.getByText(/Episodes: 13/i)).toBeInTheDocument();
+    });
   });
+
   test("should display podcast data and podcast episode", async () => {
     localStorage.setItem(KEY_PODCASTS, JSON.stringify(mockPodcasts));
     localStorage.setItem(`${podcastId}Data`, JSON.stringify(mockEpisodes));
 
-    render(
-      <MemoryRouter initialEntries={["/podcast/1535809341/episode/1000659456383"]}>
-        <Routes>
-          <Route path="/podcast/:podcastId/*" element={<Podcast />} />
-        </Routes>
-      </MemoryRouter>
-    );
-
-    expect(await screen.findByText("The Joe Budden Podcast")).toBeInTheDocument();
-    expect(screen.getByText(/The Joe Budden Network/i)).toBeInTheDocument();
-    expect(screen.getByText(/Tune into Joe Budden and his friends./i)).toBeInTheDocument();
-
-    const image = screen.getByAltText("The Joe Budden Podcast");
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute("src", mockNormalizedPodcast.image);
-
-    const linkElement = screen.getByRole("link", {
-      name: /The Joe Budden Network/i
+    await act(async () => {
+      renderPodcast(`/podcast/${podcastId}/episode/${episodeId}`);
     });
 
-    expect(linkElement).toBeInTheDocument();
-    expect(linkElement).toHaveAttribute("href", "/podcast/1535809341");
+    await waitFor(() => {
+      expect(screen.getByText("The Joe Budden Podcast")).toBeInTheDocument();
+      expect(screen.getByText(/The Joe Budden Network/i)).toBeInTheDocument();
+      expect(screen.getByText(/Tune into Joe Budden and his friends./i)).toBeInTheDocument();
 
-    const episodeCount = await screen.findByText(mockNormalizedEpisode.name);
-    expect(episodeCount).toBeInTheDocument();
+      const image = screen.getByAltText("The Joe Budden Podcast");
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute("src", mockNormalizedPodcast.image);
+
+      const linkElement = screen.getByRole("link", {
+        name: /The Joe Budden Network/i
+      });
+
+      expect(linkElement).toBeInTheDocument();
+      expect(linkElement).toHaveAttribute("href", `/podcast/${podcastId}`);
+
+      expect(screen.getByText(mockNormalizedEpisode.name)).toBeInTheDocument();
+    });
   });
 });

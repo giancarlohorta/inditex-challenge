@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 import { LoadingProvider, useLoading } from "./LoadingContext";
 
 const MockComponent = () => {
@@ -29,9 +29,13 @@ describe("LoadingContext", () => {
         <MockComponent />
       </LoadingProvider>
     );
+
     expect(screen.getByText("Loading: No")).toBeInTheDocument();
 
-    screen.getByText("Start Loading").click();
+    await act(async () => {
+      const startLoadingButton = screen.getByText("Start Loading");
+      fireEvent.click(startLoadingButton);
+    });
 
     expect(await screen.findByText("Loading: Yes")).toBeInTheDocument();
   });

@@ -55,6 +55,7 @@ describe("useFetch", () => {
   });
 
   test("should handle fetch error and display error status", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     mockAxios.onGet(mockUrl).reply(500);
 
     render(<HookWrapper hook={() => useFetch((url) => axios.get(url))} url={mockUrl} />);
@@ -65,5 +66,7 @@ describe("useFetch", () => {
       expect(screen.getByTestId("result").textContent).toBe("null");
       expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.ERROR);
     });
+
+    consoleSpy.mockRestore();
   });
 });

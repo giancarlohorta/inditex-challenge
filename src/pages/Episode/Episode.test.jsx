@@ -33,7 +33,7 @@ describe("Episode Page", () => {
     expect(episodeDescription).toBeInTheDocument();
 
     const audioElement = screen.getByRole("region", { name: /Audio Player/i });
-    expect(audioElement).toHaveAttribute("src", mockNormalizedEpisode.name.episodeUrl);
+    expect(audioElement).toHaveAttribute("src", mockNormalizedEpisode.episodeUrl);
   });
 
   test("should render 'No Description' if description is empty", async () => {

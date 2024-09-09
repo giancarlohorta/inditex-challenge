@@ -7,6 +7,7 @@ jest.mock("../context/LoadingContext", () => ({
   useLoading: jest.fn()
 }));
 
+// Wrapper component to use the custom hook in tests
 const HookWrapper = ({ hook }) => {
   const data = hook();
   return <div data-testid="result">{JSON.stringify(data)}</div>;
@@ -22,6 +23,7 @@ describe("useCache", () => {
     setIsLoading = jest.fn();
     useLoading.mockReturnValue({ setIsLoading });
 
+    // Clear localStorage and mock function calls before each test
     localStorage.clear();
     mockFetchFunction.mockClear();
   });
@@ -81,6 +83,7 @@ describe("useCache", () => {
   });
 
   test("should handle fetch error", async () => {
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     mockFetchFunction.mockRejectedValue(new Error("Fetch failed"));
 
     render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
@@ -92,5 +95,6 @@ describe("useCache", () => {
     });
 
     expect(setIsLoading).toHaveBeenCalledWith(false);
+    consoleSpy.mockRestore();
   });
 });
