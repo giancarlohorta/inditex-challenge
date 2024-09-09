@@ -5,8 +5,6 @@ import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { mockPodcasts } from "../../mocks";
 
-const mockAxios = new MockAdapter(axios);
-
 export default {
   title: "Pages/Home",
   component: Home,
@@ -30,8 +28,11 @@ export default {
   }
 };
 
+const createMockAxios = () => new MockAdapter(axios);
+
 export const DefaultState = () => {
   window.localStorage.clear();
+  const mockAxios = createMockAxios();
   mockAxios.onGet(/toppodcasts/g).reply(200, mockPodcasts);
 
   return <Home />;
@@ -39,6 +40,7 @@ export const DefaultState = () => {
 
 export const ErrorState = () => {
   window.localStorage.clear();
+  const mockAxios = createMockAxios();
   mockAxios.onGet(/toppodcasts/g).reply(500);
 
   return <Home />;

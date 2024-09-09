@@ -23,7 +23,9 @@ const Episodes = () => {
   const episodesData = useCache(`${podcastId}Data`, fetchEpisodes, fetchEpisodes);
 
   const normalizedEpisodesData = useMemo(() => {
-    return episodesData ? normalizeEpisodesData(episodesData?.results)?.slice(1) : [];
+    return episodesData && episodesData?.results?.length > 0
+      ? normalizeEpisodesData(episodesData?.results)?.slice(1)
+      : [];
   }, [episodesData]);
 
   const hasValidDuration = (array) => {
