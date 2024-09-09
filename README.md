@@ -4,7 +4,7 @@ This project was created as part of a technical challenge. It uses React with Vi
 
 ## Requirements
 
-- **Node.js**: v20.0.0 or higher
+- **Node.js**: v18.14.2 or higher
 - **npm**: v9.0.0 or higher (or use yarn/pnpm if preferred)
 
 ## Running the Project
