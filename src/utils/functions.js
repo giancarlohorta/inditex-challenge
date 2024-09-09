@@ -63,6 +63,8 @@ export const isCacheValid = (storedDate) => {
 };
 
 export const saveToCache = (key, data) => {
-  localStorage.setItem(key, JSON.stringify(data));
-  localStorage.setItem(`${key}_date`, new Date().toISOString());
+  if (data && key) {
+    localStorage.setItem(key, JSON.stringify(data));
+    localStorage.setItem(`${key}_date`, new Date().toISOString());
+  }
 };
