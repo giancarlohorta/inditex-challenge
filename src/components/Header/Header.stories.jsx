@@ -5,6 +5,7 @@ import { LoadingContext } from "../../context/LoadingContext";
 export default {
   title: "Components/Header",
   component: Header,
+  tags: ["autodocs"],
   argTypes: {
     isLoading: {
       description: "Determines whether the header should display a loading state",

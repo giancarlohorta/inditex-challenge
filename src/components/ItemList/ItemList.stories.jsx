@@ -3,7 +3,25 @@ import { MemoryRouter } from "react-router-dom";
 
 export default {
   title: "Components/ItemList",
-  component: ItemList
+  component: ItemList,
+  tags: ["autodocs"],
+  argTypes: {
+    list: {
+      description:
+        "An array of items to be displayed in the list. Each item includes an id, name, author, and image URL.",
+      control: {
+        type: "object"
+      }
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "The ItemList component displays a list of podcast items. It can render a populated list, a single item, or an empty list based on the provided `list` prop."
+      }
+    }
+  }
 };
 
 const Template = (args) => (
@@ -46,13 +64,11 @@ PopulatedList.args = {
   ]
 };
 
-// Exemplo de uma lista vazia
 export const EmptyList = Template.bind({});
 EmptyList.args = {
   list: []
 };
 
-// Exemplo de uma lista com um item
 export const SingleItemList = Template.bind({});
 SingleItemList.args = {
   list: [

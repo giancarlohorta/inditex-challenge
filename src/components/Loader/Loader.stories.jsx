@@ -3,8 +3,20 @@ import Loader from "./Loader";
 export default {
   title: "Components/Loader",
   component: Loader,
+  tags: ["autodocs"],
   argTypes: {
-    loading: { control: "boolean" }
+    loading: {
+      description: "Determines whether the loader should display a loading state.",
+      control: "boolean"
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "The Loader component displays a loading animation or message. It can be used to indicate that data is being fetched or processed."
+      }
+    }
   }
 };
 

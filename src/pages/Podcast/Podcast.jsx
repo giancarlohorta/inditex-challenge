@@ -1,9 +1,9 @@
-import { Route, Routes, useParams } from "react-router";
 import Item from "../../components/Item";
 import usePodcastData from "../../hooks/usePodcastData";
 import styles from "./Podcast.module.css";
 import Episodes from "../Episodes";
 import Episode from "../Episode";
+import { Route, Routes, useParams } from "react-router-dom";
 
 const Podcast = () => {
   const { podcastId } = useParams();

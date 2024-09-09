@@ -4,12 +4,36 @@ import { MemoryRouter } from "react-router-dom";
 export default {
   title: "Components/Item",
   component: Item,
+  tags: ["autodocs"],
   argTypes: {
-    id: { control: "text" },
-    image: { control: "text" },
-    name: { control: "text" },
-    author: { control: "text" },
-    description: { control: "text" }
+    id: {
+      control: "text",
+      description: "The unique identifier for the podcast item."
+    },
+    image: {
+      control: "text",
+      description: "The URL of the podcast's cover image."
+    },
+    name: {
+      control: "text",
+      description: "The name or title of the podcast."
+    },
+    author: {
+      control: "text",
+      description: "The name of the podcast's author or creator."
+    },
+    description: {
+      control: "text",
+      description: "A brief description of the podcast. Can be empty."
+    }
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "The Item component represents a podcast item, displaying its image, name, author, and an optional description."
+      }
+    }
   }
 };
 

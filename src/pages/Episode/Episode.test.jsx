@@ -38,14 +38,15 @@ describe("Episode Page", () => {
   });
 
   test("should render 'No Description' if description is empty", async () => {
-    const mockWithoutDescription = mockEpisodes.results.find(
-      ({ trackId }) => trackId === episodeId
-    );
+    const mockWithoutDescription = {
+      ...mockEpisodes.results.find(({ trackId }) => trackId === Number(episodeId)),
+      description: ""
+    };
     const mockEpisodesNoDescription = {
       resultCount: 13,
       results: [
-        ...mockEpisodes.results.filter(({ trackId }) => trackId === episodeId),
-        { ...mockWithoutDescription, description: "" }
+        ...mockEpisodes.results.filter(({ trackId }) => trackId !== Number(episodeId)),
+        { ...mockWithoutDescription }
       ]
     };
 

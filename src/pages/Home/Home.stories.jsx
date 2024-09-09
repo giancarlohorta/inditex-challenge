@@ -10,6 +10,7 @@ const mockAxios = new MockAdapter(axios);
 export default {
   title: "Pages/Home",
   component: Home,
+  tags: ["autodocs"],
   decorators: [
     (Story) => (
       <MemoryRouter>
@@ -18,7 +19,15 @@ export default {
         </LoadingProvider>
       </MemoryRouter>
     )
-  ]
+  ],
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "The Home page displays the list of top podcasts. It fetches data from an API and handles loading and error states."
+      }
+    }
+  }
 };
 
 export const DefaultState = () => {
