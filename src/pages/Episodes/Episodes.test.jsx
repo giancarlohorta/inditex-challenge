@@ -37,7 +37,7 @@ describe("Episodes Page", () => {
       </MemoryRouter>
     );
 
-    const episodeCount = await screen.findByText(/Episodes: 13/i);
+    const episodeCount = await screen.findByText(/Episodes: 12/i);
     expect(episodeCount).toBeInTheDocument();
 
     const episodeLink = await screen.findByRole("link", {

@@ -24,7 +24,7 @@ const Episodes = () => {
 
   const normalizedEpisodesData = useMemo(() => {
     return episodesData && episodesData?.results?.length > 0
-      ? normalizeEpisodesData(episodesData?.results)
+      ? normalizeEpisodesData(episodesData?.results)?.slice(1)
       : [];
   }, [episodesData]);
 

@@ -68,7 +68,7 @@ describe("Podcast Page", () => {
       expect(linkElement).toBeInTheDocument();
       expect(linkElement).toHaveAttribute("href", `/podcast/${podcastId}`);
 
-      expect(screen.getByText(/Episodes: 13/i)).toBeInTheDocument();
+      expect(screen.getByText(/Episodes: 12/i)).toBeInTheDocument();
     });
   });
 

@@ -42,7 +42,7 @@ describe("Episode Page", () => {
       description: ""
     };
     const mockEpisodesNoDescription = {
-      resultCount: 13,
+      resultCount: 12,
       results: [
         ...mockEpisodes.results.filter(({ trackId }) => trackId !== Number(episodeId)),
         { ...mockWithoutDescription }
