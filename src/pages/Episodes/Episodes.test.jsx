@@ -106,7 +106,6 @@ describe("Episodes Page", () => {
   });
 
   test("should display error message on fetch failure", async () => {
-    // Mocking an API failure
     mockAxios.onGet(/lookup/g).reply(500);
 
     render(

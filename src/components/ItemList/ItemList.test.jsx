@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { PopulatedList, EmptyList, SingleItemList } from "./ItemList.stories"; // Importa os stories para usar no teste
+import { PopulatedList, EmptyList, SingleItemList } from "./ItemList.stories";
 
 describe("ItemList Component", () => {
   test("renders a populated list", () => {

@@ -3,7 +3,6 @@ import { MemoryRouter, useParams } from "react-router-dom";
 import Episode from "./Episode";
 import { mockEpisodes, mockNormalizedEpisode } from "../../mocks";
 
-// Mock da função useParams
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useParams: jest.fn()
@@ -58,7 +57,6 @@ describe("Episode Page", () => {
       </MemoryRouter>
     );
 
-    // Verifica se "No Description" é exibido quando a descrição está vazia
     const noDescriptionText = await screen.findByText("No Description");
     expect(noDescriptionText).toBeInTheDocument();
   });
