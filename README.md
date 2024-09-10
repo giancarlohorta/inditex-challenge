@@ -2,6 +2,8 @@
 
 This project was created as part of a technical challenge. It uses React with Vite for frontend development.
 
+project published on Vercel: https://inditex-one.vercel.app/
+
 ## Requirements
 
 - **Node.js**: v18.14.2 or higher
