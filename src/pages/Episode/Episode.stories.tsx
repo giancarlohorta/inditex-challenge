@@ -1,6 +1,13 @@
+import { Meta, StoryFn } from "@storybook/react";
 import { mockEpisodes } from "../../mocks";
+import { RawEpisodeData } from "../../types";
 import Episode from "./Episode";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+
+interface EpisodeStoryArgs {
+  podcastId: string;
+  episodeId: string;
+}
 
 export default {
   title: "Pages/Episode",
@@ -14,14 +21,14 @@ export default {
       }
     }
   }
-};
+} as Meta<RawEpisodeData>;
 
-const setupLocalStorage = (podcastId, episodeData) => {
+const setupLocalStorage = (podcastId: string, episodeData: RawEpisodeData) => {
   localStorage.clear();
   localStorage.setItem(`${podcastId}Data`, JSON.stringify(episodeData));
 };
 
-const renderWithRouter = (podcastId, episodeId) => (
+const renderWithRouter = (podcastId: string, episodeId: string) => (
   <MemoryRouter initialEntries={[`/podcast/${podcastId}/episode/${episodeId}`]}>
     <Routes>
       <Route path="/podcast/:podcastId/episode/:episodeId" element={<Episode />} />
@@ -29,12 +36,12 @@ const renderWithRouter = (podcastId, episodeId) => (
   </MemoryRouter>
 );
 
-const Template = (args) => {
+const Template: StoryFn<EpisodeStoryArgs> = (args) => {
   setupLocalStorage(args.podcastId, mockEpisodes);
   return renderWithRouter(args.podcastId, args.episodeId);
 };
 
-const TemplateWithoutDescription = (args) => {
+const TemplateWithoutDescription: StoryFn<EpisodeStoryArgs> = (args) => {
   const mockWithoutDescription = {
     ...mockEpisodes.results.find(({ trackId }) => trackId === Number(args.episodeId)),
     description: ""

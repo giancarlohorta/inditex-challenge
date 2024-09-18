@@ -5,7 +5,7 @@ import { KEY_PODCASTS } from "../../constants/constants";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { LoadingContext } from "../../context/LoadingContext";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 
 export default {
   title: "Pages/Podcast",
@@ -20,7 +20,11 @@ export default {
   }
 };
 
-const MockLoadingProvider = ({ children }) => {
+interface MockLoadingProviderProps {
+  children: ReactNode;
+}
+
+const MockLoadingProvider = ({ children }: MockLoadingProviderProps) => {
   const [isLoading, setIsLoading] = useState(false);
   return (
     <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
@@ -31,7 +35,13 @@ const MockLoadingProvider = ({ children }) => {
 
 const createMockAxios = () => new MockAdapter(axios);
 
-const Template = (args) => {
+interface TemplateProps {
+  initialRoute: string;
+  podcastId: string;
+  episodeId: string;
+}
+
+const Template = (args: TemplateProps) => {
   return (
     <MockLoadingProvider>
       <MemoryRouter initialEntries={[args.initialRoute]}>

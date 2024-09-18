@@ -4,15 +4,22 @@ import styles from "./Podcast.module.css";
 import Episodes from "../Episodes";
 import Episode from "../Episode";
 import { Route, Routes, useParams } from "react-router-dom";
+import { NormalizedPodcast } from "../../types";
+
+const isNormalizedPodcast = (data: any): data is NormalizedPodcast => {
+  return data && typeof data === "object" && "author" in data && "id" in data;
+};
 
 const Podcast = () => {
-  const { podcastId } = useParams();
+  const { podcastId } = useParams<{ podcastId: string }>();
+
+  if (!podcastId) {
+    return <div>Invalid podcast or episode ID.</div>;
+  }
 
   const podcastData = usePodcastData(podcastId);
 
-  const hasPodcastData = Object.keys(podcastData).length === 0;
-
-  if (hasPodcastData) {
+  if (!podcastData || !isNormalizedPodcast(podcastData)) {
     return <div>Podcast data not found.</div>;
   }
 

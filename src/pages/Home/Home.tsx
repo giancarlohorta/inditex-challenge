@@ -5,7 +5,7 @@ import { KEY_PODCASTS, PODCASTS_LIMIT, STATUS_FETCH } from "../../constants/cons
 import SearchInput from "../../components/SearchInput";
 import ItemList from "../../components/ItemList";
 import useCache from "../../hooks/useCache";
-import { CachedPodcastData } from "../../types";
+import { PodcastData } from "../../types";
 
 const Home = () => {
   const { request, fetchStatus } = useFetch();
@@ -20,7 +20,7 @@ const Home = () => {
 
   const normalizedData = useMemo(() => {
     if (cachedData && typeof cachedData === "object" && "feed" in cachedData) {
-      const dataWithFeed = cachedData as CachedPodcastData;
+      const dataWithFeed = cachedData as PodcastData;
       return normalizePodcastsData(dataWithFeed.feed.entry);
     }
     return [];
