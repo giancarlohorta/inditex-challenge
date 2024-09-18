@@ -1,3 +1,5 @@
+import { LoaderProps } from "../../types";
+import { Meta, StoryFn } from "@storybook/react";
 import Loader from "./Loader";
 
 export default {
@@ -18,9 +20,9 @@ export default {
       }
     }
   }
-};
+} as Meta<LoaderProps>;
 
-const Template = (args) => <Loader {...args} />;
+const Template: StoryFn<LoaderProps> = (args) => <Loader {...args} />;
 
 export const Loading = Template.bind({});
 Loading.args = {

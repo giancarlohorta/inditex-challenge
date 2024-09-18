@@ -1,7 +1,7 @@
-import { PropTypes } from "prop-types";
+import { SearchInputProps } from "../../types";
 import styles from "./SearchInput.module.css";
 
-const SearchInput = ({ onKeywordChange, podcastCount, keyword }) => {
+const SearchInput = ({ onKeywordChange, podcastCount, keyword }: SearchInputProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.counter}>
@@ -10,17 +10,13 @@ const SearchInput = ({ onKeywordChange, podcastCount, keyword }) => {
       <input
         className={styles.input}
         placeholder="Filter Podcasts..."
-        onChange={({ target }) => onKeywordChange(target.value)}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          onKeywordChange(event.target.value)
+        }
         value={keyword}
       />
     </div>
   );
-};
-
-SearchInput.propTypes = {
-  onKeywordChange: PropTypes.func.isRequired,
-  podcastCount: PropTypes.number.isRequired,
-  keyword: PropTypes.string.isRequired
 };
 
 export default SearchInput;

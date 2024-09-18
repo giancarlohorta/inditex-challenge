@@ -1,5 +1,7 @@
 import { useState } from "react";
 import SearchInput from "./SearchInput";
+import { Meta, StoryFn } from "@storybook/react";
+import { SearchInputProps } from "../../types";
 
 export default {
   title: "Components/SearchInput",
@@ -27,12 +29,12 @@ export default {
       }
     }
   }
-};
+} as Meta<SearchInputProps>;
 
-const Template = (args) => {
+const Template: StoryFn<SearchInputProps> = (args) => {
   const [keyword, setKeyword] = useState("");
 
-  const handleKeywordChange = (newKeyword) => {
+  const handleKeywordChange = (newKeyword: string) => {
     setKeyword(newKeyword);
   };
 

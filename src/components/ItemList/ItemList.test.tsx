@@ -1,9 +1,13 @@
 import { render, screen } from "@testing-library/react";
-import { PopulatedList, EmptyList, SingleItemList } from "./ItemList.stories";
+
+import * as stories from "./ItemList.stories";
+import { composeStories } from "@storybook/react";
+
+const { PopulatedList, EmptyList, SingleItemList } = composeStories(stories);
 
 describe("ItemList Component", () => {
   test("renders a populated list", () => {
-    render(<PopulatedList {...PopulatedList.args} />);
+    render(<PopulatedList />);
 
     expect(screen.getByText("Item 1")).toBeInTheDocument();
     expect(screen.getByText("Item 2")).toBeInTheDocument();
@@ -12,7 +16,7 @@ describe("ItemList Component", () => {
   });
 
   test("renders an empty list", () => {
-    render(<EmptyList {...EmptyList.args} />);
+    render(<EmptyList />);
 
     expect(screen.queryByText("Item 1")).not.toBeInTheDocument();
     expect(screen.queryByText("Item 2")).not.toBeInTheDocument();
@@ -20,7 +24,7 @@ describe("ItemList Component", () => {
   });
 
   test("renders a list with a single item", () => {
-    render(<SingleItemList {...SingleItemList.args} />);
+    render(<SingleItemList />);
 
     expect(screen.getByText("Single Item")).toBeInTheDocument();
     expect(screen.getByText(/Single Author/i)).toBeInTheDocument();

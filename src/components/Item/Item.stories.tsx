@@ -1,5 +1,7 @@
+import { Meta, StoryFn } from "@storybook/react";
 import Item from "./Item";
 import { MemoryRouter } from "react-router-dom";
+import { NormalizedPodcast } from "../../types";
 
 export default {
   title: "Components/Item",
@@ -35,9 +37,9 @@ export default {
       }
     }
   }
-};
+} as Meta<NormalizedPodcast>;
 
-const Template = (args) => (
+const Template: StoryFn<NormalizedPodcast> = (args) => (
   <MemoryRouter>
     <Item {...args} />
   </MemoryRouter>

@@ -1,6 +1,8 @@
 import Header from "./Header";
+import { Meta, StoryFn } from "@storybook/react";
 import { MemoryRouter } from "react-router-dom";
 import { LoadingContext } from "../../context/LoadingContext";
+import { LoadingContextType } from "../../types";
 
 export default {
   title: "Components/Header",
@@ -23,16 +25,24 @@ export default {
       }
     }
   }
+} as Meta<LoadingContextType>;
+
+const MockLoadingProvider: React.FC<{ isLoading: boolean; children: React.ReactNode }> = ({
+  isLoading,
+  children
+}) => {
+  const setIsLoading = () => {};
+  return (
+    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+      {children}
+    </LoadingContext.Provider>
+  );
 };
 
-const MockLoadingProvider = ({ isLoading, children }) => {
-  return <LoadingContext.Provider value={{ isLoading }}>{children}</LoadingContext.Provider>;
-};
-
-const Template = (args) => (
+const Template: StoryFn<LoadingContextType> = (args) => (
   <MemoryRouter>
     <MockLoadingProvider isLoading={args.isLoading}>
-      <Header {...args} />
+      <Header />
     </MockLoadingProvider>
   </MemoryRouter>
 );
