@@ -1,4 +1,6 @@
-export const mockPodcasts = {
+import { PodcastData, NormalizedPodcast, EpisodesData, NormalizedEpisode } from "../types";
+
+export const mockPodcasts: PodcastData = {
   feed: {
     author: {
       name: {
@@ -460,7 +462,7 @@ export const mockPodcasts = {
   }
 };
 
-export const mockNormalizedPodcast = {
+export const mockNormalizedPodcast: NormalizedPodcast = {
   id: "1535809341",
   author: "The Joe Budden Network",
   image:
@@ -470,7 +472,7 @@ export const mockNormalizedPodcast = {
     "Tune into Joe Budden and his friends. Follow along the crazy adventures of these very random friends."
 };
 
-export const mockEpisodes = {
+export const mockEpisodes: EpisodesData = {
   resultCount: 13,
   results: [
     {
@@ -1007,7 +1009,7 @@ export const mockEpisodes = {
   ]
 };
 
-export const mockNormalizedEpisode = {
+export const mockNormalizedEpisode: NormalizedEpisode = {
   id: 1000659456383,
   name: "S2: Transmissions: The Definitive Story Of Joy Division And New Order - Trailer",
   duration: 110000,
@@ -1018,5 +1020,5 @@ export const mockNormalizedEpisode = {
     "Transmissions Season 2 launches in August, picking up where Season 1 ended, with the mighty Blue Monday. Thereafter we revisit pivotal moments, wild stories and classic tunes via new interviews with Gillian Gilbert, Peter Hook, Stephen Morris and Bernard Sumner. New Order superfans like Robert Smith, Johnny Marr, Billy Corgan and Virgil Abloh also chime in. Presented by Elizabeth Alker. A Cup&Nuzzle / Warner Music UK production.\n\n\n Hosted on Acast. See acast.com/privacy for more information."
 };
 
-export const mockUrlImage =
+export const mockUrlImage: string =
   "https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/f2/21/fa/f221fabd-017f-5125-633b-f1fe4f39802a/mza_182995249085044287.jpg/170x170bb.png";

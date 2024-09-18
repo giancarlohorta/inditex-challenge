@@ -5,6 +5,7 @@ import { mockEpisodes } from "../../mocks";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { useLoading } from "../../context/LoadingContext";
+import { RawEpisodeData } from "../../types";
 
 const mockAxios = new MockAdapter(axios);
 
@@ -23,7 +24,7 @@ describe("Episodes Page", () => {
   beforeEach(() => {
     mockAxios.reset();
     setIsLoading = jest.fn();
-    useLoading.mockReturnValue({ setIsLoading });
+    (useLoading as jest.Mock).mockReturnValue({ setIsLoading });
     localStorage.clear();
     jest.mocked(useParams).mockReturnValue({ podcastId: "12345" });
   });
@@ -59,7 +60,7 @@ describe("Episodes Page", () => {
   test("should not display the 'Duration' column if no episode has valid duration", async () => {
     const modifiedMockEpisodes = {
       ...mockEpisodes,
-      results: mockEpisodes.results.map((episode) => ({
+      results: mockEpisodes.results.map((episode: RawEpisodeData) => ({
         ...episode,
         trackTimeMillis: undefined
       }))

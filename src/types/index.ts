@@ -6,12 +6,15 @@ export interface RawPodcastData {
     attributes: {
       "im:id": string;
     };
+    [key: string]: any;
   };
   "im:artist": {
     label: string;
+    [key: string]: any;
   };
   "im:image": {
     label: string;
+    [key: string]: any;
   }[];
   "im:name": {
     label: string;
@@ -19,6 +22,7 @@ export interface RawPodcastData {
   summary: {
     label: string;
   };
+  [key: string]: any;
 }
 
 export interface NormalizedPodcast {
@@ -30,12 +34,13 @@ export interface NormalizedPodcast {
 }
 
 export interface RawEpisodeData {
-  trackId: number;
-  trackName: string;
-  trackTimeMillis: number;
-  releaseDate: string;
+  trackId?: number;
+  trackName?: string;
+  trackTimeMillis?: number;
+  releaseDate?: string;
   episodeUrl?: string;
   description?: string;
+  [key: string]: any;
 }
 
 export interface NormalizedEpisode {
@@ -93,8 +98,16 @@ export interface useFetchResponse {
 
 export interface FeedData {
   entry: RawPodcastData[];
+  [key: string]: any;
 }
 
-export interface CachedPodcastData {
+export interface PodcastData {
   feed: FeedData;
+}
+
+// Episodes
+
+export interface EpisodesData {
+  resultCount: 13;
+  results: RawEpisodeData[];
 }

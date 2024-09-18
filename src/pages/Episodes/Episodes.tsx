@@ -9,9 +9,10 @@ import { useCallback, useMemo } from "react";
 import useCache from "../../hooks/useCache";
 import { STATUS_FETCH } from "../../constants/constants";
 import styles from "./Episodes.module.css";
+import { EpisodesData, NormalizedEpisode } from "../../types";
 
 const Episodes = () => {
-  const { podcastId } = useParams();
+  const { podcastId } = useParams<{ podcastId: string }>();
   const { request, fetchStatus } = useFetch();
 
   const episodesUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
@@ -20,16 +21,18 @@ const Episodes = () => {
 
   const fetchEpisodes = useCallback(() => request(episodesUrl), [request, episodesUrl]);
 
-  const episodesData = useCache(`${podcastId}Data`, fetchEpisodes, fetchEpisodes);
+  const episodesData = useCache(`${podcastId}Data`, fetchEpisodes, episodesUrl);
 
   const normalizedEpisodesData = useMemo(() => {
-    return episodesData && episodesData?.results?.length > 0
-      ? normalizeEpisodesData(episodesData?.results)?.slice(1)
-      : [];
+    if (episodesData && typeof episodesData === "object" && "results" in episodesData) {
+      const dataWithResults = episodesData as EpisodesData;
+      return normalizeEpisodesData(dataWithResults.results)?.slice(1);
+    }
+    return [];
   }, [episodesData]);
 
-  const shouldShowDurationColumn = (array) => {
-    return array?.some(
+  const shouldShowDurationColumn = (data: NormalizedEpisode[]) => {
+    return data?.some(
       (item) =>
         Object.prototype.hasOwnProperty.call(item, "duration") && item.duration !== undefined
     );

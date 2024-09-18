@@ -22,7 +22,7 @@ jest.mock("../../context/LoadingContext", () => ({
   useLoading: jest.fn()
 }));
 
-const renderPodcast = (path) => {
+const renderPodcast = (path: string) => {
   render(
     <MemoryRouter initialEntries={[path]}>
       <Routes>
@@ -39,7 +39,7 @@ describe("Podcast Page", () => {
 
   beforeEach(() => {
     setIsLoading = jest.fn();
-    useLoading.mockReturnValue({ setIsLoading });
+    (useLoading as jest.Mock).mockReturnValue({ setIsLoading });
     jest.mocked(useParams).mockReturnValue({ podcastId, episodeId });
     localStorage.clear();
   });
