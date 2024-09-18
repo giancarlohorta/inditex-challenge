@@ -46,10 +46,10 @@ export interface RawEpisodeData {
 export interface NormalizedEpisode {
   id: number;
   name: string;
-  duration?: number;
+  duration?: number | undefined;
   releaseDate: string;
-  episodeUrl: string | undefined;
-  description: string | undefined;
+  episodeUrl?: string | undefined;
+  description?: string | undefined;
 }
 
 // context

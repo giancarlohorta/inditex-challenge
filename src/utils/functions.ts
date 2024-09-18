@@ -27,12 +27,12 @@ export const normalizeEpisodesData = (data: RawEpisodeData[]): NormalizedEpisode
   return data?.map(
     ({ trackId, trackName, trackTimeMillis, releaseDate, episodeUrl, description }) => {
       return {
-        id: trackId,
-        name: trackName,
-        duration: trackTimeMillis,
-        releaseDate,
-        episodeUrl,
-        description
+        id: trackId ?? 0,
+        name: trackName ?? "Unknown",
+        duration: trackTimeMillis ?? 0,
+        releaseDate: releaseDate ?? "Unknown",
+        episodeUrl: episodeUrl ?? "",
+        description: description ?? "No description available"
       };
     }
   );
