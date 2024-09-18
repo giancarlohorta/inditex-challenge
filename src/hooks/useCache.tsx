@@ -1,42 +1,67 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLoading } from "../context/LoadingContext";
 import { getStoredData, isCacheValid, saveToCache } from "../utils/functions";
+import { RootState } from "../store";
+import { setPodcasts } from "../features/podecastSlice";
+import { setEpisodes } from "../features/episodeSlice";
 
 const useCache = (
   key: string,
   fetchFunction: () => Promise<object>,
-  url: string
+  url: string,
+  cacheType: "podcasts" | "episodes",
+  podcastId?: string
 ): object | null => {
+  const dispatch = useDispatch();
   const { setIsLoading } = useLoading();
-  const [cachedData, setCachedData] = useState<object | null>(null);
+
+  const cacheData = useSelector((state: RootState) =>
+    cacheType === "podcasts" ? state.podcasts.data : state.episodes.list[podcastId || ""]?.data
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
+
       const { storedData, storedDate } = getStoredData(key);
 
       if (storedData && storedDate && isCacheValid(storedDate)) {
         setIsLoading(false);
-        setCachedData(JSON.parse(storedData));
-        return;
+
+        if (cacheType === "podcasts") {
+          dispatch(setPodcasts(JSON.parse(storedData)));
+        } else if (cacheType === "episodes" && podcastId) {
+          dispatch(setEpisodes({ podcastId, data: JSON.parse(storedData) }));
+        }
+
+        return JSON.parse(storedData);
       }
 
       try {
         const data = await fetchFunction();
-        setCachedData(data);
+
+        if (cacheType === "podcasts") {
+          dispatch(setPodcasts(data));
+        } else if (cacheType === "episodes" && podcastId) {
+          dispatch(setEpisodes({ podcastId, data }));
+        }
+
         saveToCache(key, data);
+
+        return data;
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error("Failed to fetch data", error);
+        return null;
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [key, fetchFunction, url]);
+  }, [key, fetchFunction, cacheType, podcastId, dispatch, setIsLoading, url]);
 
-  return cachedData;
+  return cacheData;
 };
 
 export default useCache;

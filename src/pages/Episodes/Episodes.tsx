@@ -21,7 +21,13 @@ const Episodes = () => {
 
   const fetchEpisodes = useCallback(() => request(episodesUrl), [request, episodesUrl]);
 
-  const episodesData = useCache(`${podcastId}Data`, fetchEpisodes, episodesUrl);
+  const episodesData = useCache(
+    `${podcastId}Data`,
+    fetchEpisodes,
+    episodesUrl,
+    "episodes",
+    podcastId
+  );
 
   const normalizedEpisodesData = useMemo(() => {
     if (episodesData && typeof episodesData === "object" && "results" in episodesData) {

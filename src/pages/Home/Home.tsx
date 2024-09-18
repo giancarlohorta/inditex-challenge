@@ -16,7 +16,7 @@ const Home = () => {
 
   const fetchPodcasts = useCallback(() => request(url), [request, url]);
 
-  const cachedData = useCache(KEY_PODCASTS, fetchPodcasts, url);
+  const cachedData = useCache(KEY_PODCASTS, fetchPodcasts, url, "podcasts");
 
   const normalizedData = useMemo(() => {
     if (cachedData && typeof cachedData === "object" && "feed" in cachedData) {
