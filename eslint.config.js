@@ -14,14 +14,14 @@ export default [
       parserOptions: {
         ecmaVersion: "latest",
         ecmaFeatures: { jsx: true },
-        sourceType: "module"
-      }
+        sourceType: "module",
+      },
     },
     settings: { react: { version: "18.3" } },
     plugins: {
       react,
       "react-hooks": reactHooks,
-      jest
+      jest,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -35,9 +35,9 @@ export default [
       "no-console": [
         "error",
         {
-          allow: ["info"]
-        }
-      ]
-    }
-  }
+          allow: ["info"],
+        },
+      ],
+    },
+  },
 ];
