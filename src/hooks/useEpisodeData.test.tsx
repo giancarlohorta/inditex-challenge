@@ -1,8 +1,13 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import useEpisodeData from "./useEpisodeData";
 import { mockEpisodes, mockNormalizedEpisode } from "../mocks";
+import { NormalizedEpisode } from "../types";
 
-const HookWrapper = ({ hook }) => {
+interface HookWrapperProps {
+  hook: () => NormalizedEpisode | {};
+}
+
+const HookWrapper = ({ hook }: HookWrapperProps) => {
   const data = hook();
   return <div data-testid="result">{JSON.stringify(data)}</div>;
 };

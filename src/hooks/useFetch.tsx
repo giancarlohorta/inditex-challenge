@@ -2,13 +2,14 @@
 import { useCallback, useState } from "react";
 import { STATUS_FETCH } from "../constants/constants";
 import { defaultFetchFunction } from "../utils/functions";
+import { FetchFunctionType, useFetchResponse } from "../types";
 
-const useFetch = (fetchFunction = defaultFetchFunction) => {
-  const [data, setData] = useState(null);
-  const [fetchStatus, setFetchStatus] = useState(STATUS_FETCH.INITIAL);
+const useFetch = (fetchFunction: FetchFunctionType = defaultFetchFunction): useFetchResponse => {
+  const [data, setData] = useState<object>({});
+  const [fetchStatus, setFetchStatus] = useState<string>(STATUS_FETCH.INITIAL);
 
   const request = useCallback(
-    async (url) => {
+    async (url: string) => {
       setFetchStatus(STATUS_FETCH.LOADING);
 
       return fetchFunction(url)

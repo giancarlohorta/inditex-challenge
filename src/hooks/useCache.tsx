@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useLoading } from "../context/LoadingContext";
 import { getStoredData, isCacheValid, saveToCache } from "../utils/functions";
 
-const useCache = (key, fetchFunction, url) => {
+const useCache = (key: string, fetchFunction: () => Promise<object>, url: string) => {
   const { setIsLoading } = useLoading();
-  const [cachedData, setCachedData] = useState(null);
+  const [cachedData, setCachedData] = useState<object | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
