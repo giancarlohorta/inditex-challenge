@@ -4,13 +4,14 @@ import { LoadingProvider } from "../../context/LoadingContext";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import { mockPodcasts } from "../../mocks";
+import { StoryFn } from "@storybook/react";
 
 export default {
   title: "Pages/Home",
   component: Home,
   tags: ["autodocs"],
   decorators: [
-    (Story) => (
+    (Story: StoryFn) => (
       <MemoryRouter>
         <LoadingProvider>
           <Story />
