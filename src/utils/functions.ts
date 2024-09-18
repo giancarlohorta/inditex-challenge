@@ -1,12 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { format } from "date-fns";
 import { CACHE_TIME } from "../constants/constants";
-import {
-  NormalizedEpisode,
-  NormalizedPodcast,
-  RawEpisodeData,
-  RawPodcastData,
-} from "../types";
+import { NormalizedEpisode, NormalizedPodcast, RawEpisodeData, RawPodcastData } from "../types";
 
 export const defaultFetchFunction = async (
   url: string,
@@ -16,39 +11,28 @@ export const defaultFetchFunction = async (
   return response;
 };
 
-export const normalizePodcastsData = (
-  data: RawPodcastData[]
-): NormalizedPodcast[] => {
+export const normalizePodcastsData = (data: RawPodcastData[]): NormalizedPodcast[] => {
   return data?.map((podcast) => {
     return {
       id: podcast.id.attributes["im:id"],
       author: podcast["im:artist"].label,
       image: podcast["im:image"][2].label,
       name: podcast["im:name"].label,
-      description: podcast.summary.label,
+      description: podcast.summary.label
     };
   });
 };
 
-export const normalizeEpisodesData = (
-  data: RawEpisodeData[]
-): NormalizedEpisode[] => {
+export const normalizeEpisodesData = (data: RawEpisodeData[]): NormalizedEpisode[] => {
   return data?.map(
-    ({
-      trackId,
-      trackName,
-      trackTimeMillis,
-      releaseDate,
-      episodeUrl,
-      description,
-    }) => {
+    ({ trackId, trackName, trackTimeMillis, releaseDate, episodeUrl, description }) => {
       return {
         id: trackId,
         name: trackName,
         duration: trackTimeMillis,
         releaseDate,
         episodeUrl,
-        description,
+        description
       };
     }
   );
@@ -67,8 +51,7 @@ export const millisToHoursMinutesAndSeconds = (millis: number): string => {
     : `${formattedMinutes}:${formattedSeconds}`;
 };
 
-export const formatReleaseDate = (date: string): string =>
-  format(date, "dd/MM/yyyy");
+export const formatReleaseDate = (date: string): string => format(date, "dd/MM/yyyy");
 
 export const getStoredData = (
   key: string
@@ -85,10 +68,7 @@ export const isCacheValid = (storedDate: string): boolean => {
   return timeDifference < CACHE_TIME;
 };
 
-export const saveToCache = (
-  key: string,
-  data: Record<string, unknown> | unknown[]
-): void => {
+export const saveToCache = (key: string, data: object): void => {
   if (data && key) {
     localStorage.setItem(key, JSON.stringify(data));
     localStorage.setItem(`${key}_date`, new Date().toISOString());

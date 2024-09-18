@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 
 export interface RawPodcastData {
@@ -75,4 +76,15 @@ export interface SearchInputProps {
   podcastCount: number;
   keyword: string;
   onKeywordChange: (value: string) => void;
+}
+
+// useFetch
+
+export interface FetchFunctionType {
+  (url: string): Promise<AxiosResponse>;
+}
+export interface useFetchResponse {
+  data: object;
+  fetchStatus: string;
+  request: FetchFunctionType;
 }

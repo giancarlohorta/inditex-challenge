@@ -2,8 +2,13 @@ import { render, screen, waitFor } from "@testing-library/react";
 import usePodcastData from "./usePodcastData";
 import { mockNormalizedPodcast, mockPodcasts } from "../mocks";
 import { KEY_PODCASTS } from "../constants/constants";
+import { NormalizedPodcast } from "../types";
 
-const HookWrapper = ({ hook }) => {
+interface HookWrapperProps {
+  hook: () => NormalizedPodcast | {};
+}
+
+const HookWrapper = ({ hook }: HookWrapperProps) => {
   const data = hook();
   return <div data-testid="result">{JSON.stringify(data)}</div>;
 };

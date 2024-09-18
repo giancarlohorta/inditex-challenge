@@ -4,10 +4,16 @@ import MockAdapter from "axios-mock-adapter";
 import useFetch from "./useFetch";
 import { STATUS_FETCH } from "../constants/constants";
 import { useEffect } from "react";
+import { useFetchResponse } from "../types";
 
 const mockAxios = new MockAdapter(axios);
 
-const HookWrapper = ({ hook, url }) => {
+interface HookWrapperProps {
+  hook: () => useFetchResponse;
+  url: string;
+}
+
+const HookWrapper = ({ hook, url }: HookWrapperProps) => {
   const { data, fetchStatus, request } = hook();
   useEffect(() => {
     request(url);
@@ -63,7 +69,7 @@ describe("useFetch", () => {
     expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.LOADING);
 
     await waitFor(() => {
-      expect(screen.getByTestId("result").textContent).toBe("null");
+      expect(screen.getByTestId("result").textContent).toBe("{}");
       expect(screen.getByTestId("status").textContent).toBe(STATUS_FETCH.ERROR);
     });
 

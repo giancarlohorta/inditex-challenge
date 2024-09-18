@@ -7,8 +7,12 @@ jest.mock("../context/LoadingContext", () => ({
   useLoading: jest.fn()
 }));
 
+interface HookWrapperProps {
+  hook: () => object | null;
+}
+
 // Wrapper component to use the custom hook in tests
-const HookWrapper = ({ hook }) => {
+const HookWrapper = ({ hook }: HookWrapperProps) => {
   const data = hook();
   return <div data-testid="result">{JSON.stringify(data)}</div>;
 };
@@ -17,11 +21,11 @@ describe("useCache", () => {
   const key = "testKey";
   const mockData = { data: "test" };
   const mockFetchFunction = jest.fn();
-  let setIsLoading;
+  let setIsLoading: jest.Mock;
 
   beforeEach(() => {
     setIsLoading = jest.fn();
-    useLoading.mockReturnValue({ setIsLoading });
+    (useLoading as jest.Mock).mockReturnValue({ setIsLoading });
 
     // Clear localStorage and mock function calls before each test
     localStorage.clear();
