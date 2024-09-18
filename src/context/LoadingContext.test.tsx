@@ -1,8 +1,9 @@
 import { render, screen, act, fireEvent } from "@testing-library/react";
 import { LoadingProvider, useLoading } from "./LoadingContext";
+import { LoadingContextType } from "../types";
 
 const MockComponent = () => {
-  const { isLoading, setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading() as LoadingContextType;
 
   return (
     <div>

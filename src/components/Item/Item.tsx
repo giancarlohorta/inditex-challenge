@@ -1,8 +1,8 @@
-import { PropTypes } from "prop-types";
 import { Link } from "react-router-dom";
 import styles from "./Item.module.css";
+import { NormalizedPodcast } from "../../types";
 
-const Item = ({ id, image, name, author, description }) => {
+const Item = ({ id, image, name, author, description }: NormalizedPodcast) => {
   return (
     <Link
       className={styles.container}
@@ -21,14 +21,6 @@ const Item = ({ id, image, name, author, description }) => {
       )}
     </Link>
   );
-};
-
-Item.propTypes = {
-  id: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  description: PropTypes.string
 };
 
 export default Item;

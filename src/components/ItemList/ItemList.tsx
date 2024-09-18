@@ -1,8 +1,8 @@
-import { PropTypes } from "prop-types";
+import { ListNormalizedPodcasts } from "../../types";
 import Item from "../Item";
 import styles from "./ItemList.module.css";
 
-const ItemList = ({ list }) => {
+const ItemList = ({ list }: ListNormalizedPodcasts) => {
   if (!list || list.length === 0) {
     return <div>No Podcasts found.</div>;
   }
@@ -14,17 +14,6 @@ const ItemList = ({ list }) => {
       })}
     </div>
   );
-};
-
-ItemList.propTypes = {
-  list: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      image: PropTypes.string,
-      name: PropTypes.string,
-      author: PropTypes.string
-    })
-  )
 };
 
 export default ItemList;
