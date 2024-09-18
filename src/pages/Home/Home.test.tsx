@@ -1,10 +1,4 @@
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Home from "./Home";
 import { mockPodcasts, mockUrlImage } from "../../mocks";
@@ -15,7 +9,7 @@ import { useLoading } from "../../context/LoadingContext";
 const mockAxios = new MockAdapter(axios);
 
 jest.mock("../../context/LoadingContext", () => ({
-  useLoading: jest.fn(),
+  useLoading: jest.fn()
 }));
 
 describe("Home Page", () => {
@@ -25,7 +19,7 @@ describe("Home Page", () => {
     mockAxios.reset();
 
     setIsLoading = jest.fn();
-    useLoading.mockReturnValue({ setIsLoading });
+    (useLoading as jest.Mock).mockReturnValue({ setIsLoading });
 
     localStorage.clear();
   });
@@ -45,14 +39,11 @@ describe("Home Page", () => {
     await waitFor(() => {
       expect(screen.getByText("5")).toBeInTheDocument();
       expect(screen.getByText("The Joe Budden Podcast")).toBeInTheDocument();
-      expect(screen.getByAltText("The Joe Budden Podcast")).toHaveAttribute(
-        "src",
-        mockUrlImage
-      );
+      expect(screen.getByAltText("The Joe Budden Podcast")).toHaveAttribute("src", mockUrlImage);
       expect(screen.getByText("DISGRACELAND")).toBeInTheDocument();
       expect(screen.getByText(/Double Elvis Productions/)).toBeInTheDocument();
       const linkElement = screen.getByRole("link", {
-        name: /Podcast DISGRACELAND by Double Elvis Productions/i,
+        name: /Podcast DISGRACELAND by Double Elvis Productions/i
       });
       expect(linkElement).toBeInTheDocument();
       expect(linkElement).toHaveAttribute("href", "/podcast/1275172907");
@@ -70,9 +61,7 @@ describe("Home Page", () => {
       );
     });
 
-    const filterInput = await screen.findByPlaceholderText(
-      "Filter Podcasts..."
-    );
+    const filterInput = await screen.findByPlaceholderText("Filter Podcasts...");
     expect(filterInput).toBeInTheDocument();
 
     act(() => {
@@ -98,9 +87,7 @@ describe("Home Page", () => {
       );
     });
 
-    const filterInput = await screen.findByPlaceholderText(
-      "Filter Podcasts..."
-    );
+    const filterInput = await screen.findByPlaceholderText("Filter Podcasts...");
     expect(filterInput).toBeInTheDocument();
 
     act(() => {
@@ -132,9 +119,7 @@ describe("Home Page", () => {
   });
 
   test("should show error state", async () => {
-    const consoleSpy = jest
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
 
     mockAxios.onGet(/toppodcasts/g).reply(500, null);
 
@@ -146,9 +131,7 @@ describe("Home Page", () => {
       );
     });
 
-    expect(
-      await screen.findByText("Error loading podcasts.")
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Error loading podcasts.")).toBeInTheDocument();
     consoleSpy.mockRestore();
   });
 

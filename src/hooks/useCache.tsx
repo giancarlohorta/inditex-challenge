@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { useLoading } from "../context/LoadingContext";
 import { getStoredData, isCacheValid, saveToCache } from "../utils/functions";
 
-const useCache = (key: string, fetchFunction: () => Promise<object>, url: string) => {
+const useCache = (
+  key: string,
+  fetchFunction: () => Promise<object>,
+  url: string
+): object | null => {
   const { setIsLoading } = useLoading();
   const [cachedData, setCachedData] = useState<object | null>(null);
 

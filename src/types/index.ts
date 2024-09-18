@@ -88,3 +88,13 @@ export interface useFetchResponse {
   fetchStatus: string;
   request: FetchFunctionType;
 }
+
+// Home
+
+export interface FeedData {
+  entry: RawPodcastData[];
+}
+
+export interface CachedPodcastData {
+  feed: FeedData;
+}

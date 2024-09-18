@@ -5,23 +5,28 @@ import { KEY_PODCASTS, PODCASTS_LIMIT, STATUS_FETCH } from "../../constants/cons
 import SearchInput from "../../components/SearchInput";
 import ItemList from "../../components/ItemList";
 import useCache from "../../hooks/useCache";
+import { CachedPodcastData } from "../../types";
 
 const Home = () => {
   const { request, fetchStatus } = useFetch();
 
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState<string>("");
 
   const url = `https://api.allorigins.win/raw?url=https://itunes.apple.com/us/rss/toppodcasts/limit=${PODCASTS_LIMIT}/genre=1310/json`;
 
   const fetchPodcasts = useCallback(() => request(url), [request, url]);
 
-  const cachedData = useCache(KEY_PODCASTS, fetchPodcasts, fetchPodcasts);
+  const cachedData = useCache(KEY_PODCASTS, fetchPodcasts, url);
 
   const normalizedData = useMemo(() => {
-    return cachedData ? normalizePodcastsData(cachedData.feed.entry) : [];
+    if (cachedData && typeof cachedData === "object" && "feed" in cachedData) {
+      const dataWithFeed = cachedData as CachedPodcastData;
+      return normalizePodcastsData(dataWithFeed.feed.entry);
+    }
+    return [];
   }, [cachedData]);
 
-  const handleKeywordChange = (value) => {
+  const handleKeywordChange = (value: string) => {
     setKeyword(value);
   };
 
