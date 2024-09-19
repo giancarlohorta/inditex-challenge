@@ -17,10 +17,11 @@ const episodeSlice = createSlice({
       state.list[action.payload.podcastId] = {
         data: action.payload.data
       };
-    }
+    },
+    resetEpisodes: () => initialState
   }
 });
 
-export const { setEpisodes } = episodeSlice.actions;
+export const { setEpisodes, resetEpisodes } = episodeSlice.actions;
 
 export default episodeSlice.reducer;

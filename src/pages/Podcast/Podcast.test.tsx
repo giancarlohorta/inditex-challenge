@@ -11,6 +11,8 @@ import {
 import { useLoading } from "../../context/LoadingContext";
 import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
+import { Provider } from "react-redux";
+import { store } from "../../store";
 
 const mockAxios = new MockAdapter(axios);
 
@@ -18,24 +20,27 @@ jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useParams: jest.fn()
 }));
+
 jest.mock("../../context/LoadingContext", () => ({
   useLoading: jest.fn()
 }));
 
 const renderPodcast = (path: string) => {
   render(
-    <MemoryRouter initialEntries={[path]}>
-      <Routes>
-        <Route path="/podcast/:podcastId/*" element={<Podcast />} />
-      </Routes>
-    </MemoryRouter>
+    <Provider store={store}>
+      <MemoryRouter initialEntries={[path]}>
+        <Routes>
+          <Route path="/podcast/:podcastId/*" element={<Podcast />} />
+        </Routes>
+      </MemoryRouter>
+    </Provider>
   );
 };
 
 describe("Podcast Page", () => {
   const podcastId = "1535809341";
   const episodeId = "1000659456383";
-  let setIsLoading;
+  let setIsLoading: jest.Mock;
 
   beforeEach(() => {
     setIsLoading = jest.fn();
@@ -97,6 +102,17 @@ describe("Podcast Page", () => {
       expect(linkElement).toHaveAttribute("href", `/podcast/${podcastId}`);
 
       expect(screen.getByText(mockNormalizedEpisode.name)).toBeInTheDocument();
+    });
+  });
+  test("should display 'Invalid podcast or episode ID.' if podcastId is missing", async () => {
+    jest.mocked(useParams).mockReturnValue({ podcastId: undefined });
+
+    await act(async () => {
+      renderPodcast(`/podcast/${podcastId}`);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Invalid podcast or episode ID.")).toBeInTheDocument();
     });
   });
 });

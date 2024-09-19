@@ -2,6 +2,9 @@ import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { format } from "date-fns";
 import { CACHE_TIME } from "../constants/constants";
 import { NormalizedEpisode, NormalizedPodcast, RawEpisodeData, RawPodcastData } from "../types";
+import { store } from "../store";
+import { resetEpisodes } from "../features/episodeSlice";
+import { resetPodcasts } from "../features/podecastSlice";
 
 export const defaultFetchFunction = async (
   url: string,
@@ -73,4 +76,9 @@ export const saveToCache = (key: string, data: object): void => {
     localStorage.setItem(key, JSON.stringify(data));
     localStorage.setItem(`${key}_date`, new Date().toISOString());
   }
+};
+
+export const resetStore = () => {
+  store.dispatch(resetEpisodes());
+  store.dispatch(resetPodcasts());
 };

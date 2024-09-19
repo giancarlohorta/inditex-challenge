@@ -6,6 +6,8 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import { useLoading } from "../../context/LoadingContext";
 import { RawEpisodeData } from "../../types";
+import { Provider } from "react-redux";
+import { store } from "../../store";
 
 const mockAxios = new MockAdapter(axios);
 
@@ -19,7 +21,7 @@ jest.mock("react-router-dom", () => ({
 }));
 
 describe("Episodes Page", () => {
-  let setIsLoading;
+  let setIsLoading: jest.Mock;
 
   beforeEach(() => {
     mockAxios.reset();
@@ -33,9 +35,11 @@ describe("Episodes Page", () => {
     mockAxios.onGet(/lookup/g).reply(200, mockEpisodes);
 
     render(
-      <MemoryRouter>
-        <Episodes />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episodes />
+        </MemoryRouter>
+      </Provider>
     );
 
     const episodeCount = await screen.findByText(/Episodes: 12/i);
@@ -69,9 +73,11 @@ describe("Episodes Page", () => {
     mockAxios.onGet(/lookup/g).reply(200, modifiedMockEpisodes);
 
     render(
-      <MemoryRouter>
-        <Episodes />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episodes />
+        </MemoryRouter>
+      </Provider>
     );
 
     await waitFor(() => expect(screen.queryByText("Duration")).not.toBeInTheDocument());
@@ -86,9 +92,11 @@ describe("Episodes Page", () => {
     mockAxios.onGet(/lookup/g).reply(200, modifiedMockEpisodes);
 
     render(
-      <MemoryRouter>
-        <Episodes />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episodes />
+        </MemoryRouter>
+      </Provider>
     );
 
     await waitFor(() => expect(screen.getByText("No episodes available yet.")).toBeInTheDocument());
@@ -98,9 +106,11 @@ describe("Episodes Page", () => {
     mockAxios.onGet(/lookup/g).reply(() => new Promise(() => {}));
 
     render(
-      <MemoryRouter>
-        <Episodes />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episodes />
+        </MemoryRouter>
+      </Provider>
     );
 
     expect(screen.getByText(/Loading podcast details.../i)).toBeInTheDocument();
@@ -112,9 +122,11 @@ describe("Episodes Page", () => {
     mockAxios.onGet(/lookup/g).reply(500);
 
     render(
-      <MemoryRouter>
-        <Episodes />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episodes />
+        </MemoryRouter>
+      </Provider>
     );
 
     const errorMessage = await screen.findByText(/Failed to load podcast details/i);

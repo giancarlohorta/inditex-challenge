@@ -1,7 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import { Provider } from "react-redux";
+import { store } from "../store";
 import usePodcastData from "./usePodcastData";
-import { mockNormalizedPodcast, mockPodcasts } from "../mocks";
+import { mockPodcasts, mockNormalizedPodcast } from "../mocks";
 import { KEY_PODCASTS } from "../constants/constants";
+import { resetStore } from "../utils/functions";
+import { setPodcasts } from "../features/podecastSlice";
 import { NormalizedPodcast } from "../types";
 
 interface HookWrapperProps {
@@ -17,14 +21,19 @@ describe("usePodcastData", () => {
   const podcastId = "1535809341";
 
   beforeEach(() => {
-    // Clear localStorage before each test to avoid residual data
+    // Limpar o localStorage e o estado da store antes de cada teste
     localStorage.clear();
+    resetStore();
   });
 
   test("should fetch and normalize podcast data if it exists in localStorage", async () => {
     localStorage.setItem(KEY_PODCASTS, JSON.stringify(mockPodcasts));
 
-    render(<HookWrapper hook={() => usePodcastData(podcastId)} />);
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId("result").textContent).toEqual(
@@ -33,8 +42,26 @@ describe("usePodcastData", () => {
     });
   });
 
+  test("should store podcasts data in Redux when fetched from localStorage", async () => {
+    localStorage.setItem(KEY_PODCASTS, JSON.stringify(mockPodcasts));
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
+
+    await waitFor(() => {
+      expect(store.getState().podcasts.data).toEqual(mockPodcasts);
+    });
+  });
+
   test("should return an empty object when localStorage has no data", async () => {
-    render(<HookWrapper hook={() => usePodcastData(podcastId)} />);
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
@@ -42,7 +69,7 @@ describe("usePodcastData", () => {
   });
 
   test("should return an empty object if podcast is not found in the normalized data", async () => {
-    // Set mock podcasts data in localStorage that does not include the podcastId
+    // Definir mock de dados no localStorage sem o podcastId esperado
     localStorage.setItem(
       KEY_PODCASTS,
       JSON.stringify({
@@ -67,22 +94,50 @@ describe("usePodcastData", () => {
       })
     );
 
-    render(<HookWrapper hook={() => usePodcastData(podcastId)} />);
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
     });
   });
 
-  test("should handle JSON parsing errors", async () => {
+  test("should handle JSON parsing errors gracefully", async () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     localStorage.setItem(KEY_PODCASTS, "{ invalid json ");
 
-    render(<HookWrapper hook={() => usePodcastData(podcastId)} />);
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
     });
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Error retrieving or processing podcast data from localStorage:",
+      expect.any(Error)
+    );
     consoleSpy.mockRestore();
+  });
+
+  test("should return data from Redux if available", async () => {
+    store.dispatch(setPodcasts(mockPodcasts));
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("result").textContent).toEqual(
+        JSON.stringify(mockNormalizedPodcast)
+      );
+    });
   });
 });
