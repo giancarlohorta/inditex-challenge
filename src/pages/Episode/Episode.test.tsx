@@ -2,6 +2,9 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, useParams } from "react-router-dom";
 import Episode from "./Episode";
 import { mockEpisodes, mockNormalizedEpisode } from "../../mocks";
+import { Provider } from "react-redux";
+import { store } from "../../store";
+import { resetStore } from "../../utils/functions";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
@@ -14,6 +17,7 @@ describe("Episode Page", () => {
 
   beforeEach(() => {
     localStorage.clear();
+    resetStore();
     jest.mocked(useParams).mockReturnValue({ podcastId, episodeId });
   });
 
@@ -21,9 +25,11 @@ describe("Episode Page", () => {
     localStorage.setItem(`${podcastId}Data`, JSON.stringify(mockEpisodes));
 
     render(
-      <MemoryRouter>
-        <Episode />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episode />
+        </MemoryRouter>
+      </Provider>
     );
 
     const episodeTitle = await screen.findByText(mockNormalizedEpisode.name);
@@ -52,12 +58,40 @@ describe("Episode Page", () => {
     localStorage.setItem(`${podcastId}Data`, JSON.stringify(mockEpisodesNoDescription));
 
     render(
-      <MemoryRouter>
-        <Episode />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episode />
+        </MemoryRouter>
+      </Provider>
     );
 
     const noDescriptionText = await screen.findByText("No Description");
     expect(noDescriptionText).toBeInTheDocument();
+  });
+
+  test("should render 'Invalid podcast or episode ID.' when params are missing", () => {
+    jest.mocked(useParams).mockReturnValue({ podcastId: "", episodeId: "" });
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episode />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(screen.getByText("Invalid podcast or episode ID.")).toBeInTheDocument();
+  });
+
+  test("should render 'Loading episode data...' when episode data is not available", () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episode />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(screen.getByText("Loading episode data...")).toBeInTheDocument();
   });
 });

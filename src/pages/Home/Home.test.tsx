@@ -4,6 +4,8 @@ import Home from "./Home";
 import { mockPodcasts, mockUrlImage } from "../../mocks";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
+import { Provider } from "react-redux";
+import { store } from "../../store";
 import { useLoading } from "../../context/LoadingContext";
 
 const mockAxios = new MockAdapter(axios);
@@ -13,7 +15,7 @@ jest.mock("../../context/LoadingContext", () => ({
 }));
 
 describe("Home Page", () => {
-  let setIsLoading;
+  let setIsLoading: jest.Mock;
 
   beforeEach(() => {
     mockAxios.reset();
@@ -29,9 +31,11 @@ describe("Home Page", () => {
 
     await act(async () => {
       render(
-        <MemoryRouter>
-          <Home />
-        </MemoryRouter>
+        <Provider store={store}>
+          <MemoryRouter>
+            <Home />
+          </MemoryRouter>
+        </Provider>
       );
     });
 
@@ -55,9 +59,11 @@ describe("Home Page", () => {
 
     await act(async () => {
       render(
-        <MemoryRouter>
-          <Home />
-        </MemoryRouter>
+        <Provider store={store}>
+          <MemoryRouter>
+            <Home />
+          </MemoryRouter>
+        </Provider>
       );
     });
 
@@ -68,7 +74,6 @@ describe("Home Page", () => {
       fireEvent.change(filterInput, { target: { value: "Budden" } });
     });
 
-    // Use `waitFor` to wait for the filtered results
     await waitFor(() => {
       expect(screen.getByText("1")).toBeInTheDocument();
       expect(screen.getByText("The Joe Budden Podcast")).toBeInTheDocument();
@@ -81,9 +86,11 @@ describe("Home Page", () => {
 
     await act(async () => {
       render(
-        <MemoryRouter>
-          <Home />
-        </MemoryRouter>
+        <Provider store={store}>
+          <MemoryRouter>
+            <Home />
+          </MemoryRouter>
+        </Provider>
       );
     });
 
@@ -94,7 +101,6 @@ describe("Home Page", () => {
       fireEvent.change(filterInput, { target: { value: "" } });
     });
 
-    // Use `waitFor` to wait for the updated results
     await waitFor(() => {
       expect(screen.getByText("5")).toBeInTheDocument();
       expect(screen.getByText("The Joe Budden Podcast")).toBeInTheDocument();
@@ -107,9 +113,11 @@ describe("Home Page", () => {
 
     await act(async () => {
       render(
-        <MemoryRouter>
-          <Home />
-        </MemoryRouter>
+        <Provider store={store}>
+          <MemoryRouter>
+            <Home />
+          </MemoryRouter>
+        </Provider>
       );
     });
 
@@ -125,9 +133,11 @@ describe("Home Page", () => {
 
     await act(async () => {
       render(
-        <MemoryRouter>
-          <Home />
-        </MemoryRouter>
+        <Provider store={store}>
+          <MemoryRouter>
+            <Home />
+          </MemoryRouter>
+        </Provider>
       );
     });
 
@@ -140,9 +150,11 @@ describe("Home Page", () => {
 
     await act(async () => {
       render(
-        <MemoryRouter>
-          <Home />
-        </MemoryRouter>
+        <Provider store={store}>
+          <MemoryRouter>
+            <Home />
+          </MemoryRouter>
+        </Provider>
       );
     });
 

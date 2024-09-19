@@ -15,9 +15,10 @@ const podcastSlice = createSlice({
   reducers: {
     setPodcasts(state, action: PayloadAction<PodcastData | {}>) {
       state.data = action.payload;
-    }
+    },
+    resetPodcasts: () => initialState
   }
 });
 
-export const { setPodcasts } = podcastSlice.actions;
+export const { setPodcasts, resetPodcasts } = podcastSlice.actions;
 export default podcastSlice.reducer;
