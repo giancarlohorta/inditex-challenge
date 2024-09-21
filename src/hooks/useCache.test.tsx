@@ -1,7 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import useCache from "./useCache";
 import { useLoading } from "../context/LoadingContext";
+import { Provider } from "react-redux";
+import { store } from "../store";
 import { CACHE_TIME } from "../constants/constants";
+import { resetStore } from "../utils/functions";
 
 jest.mock("../context/LoadingContext", () => ({
   useLoading: jest.fn()
@@ -19,86 +22,224 @@ const HookWrapper = ({ hook }: HookWrapperProps) => {
 
 describe("useCache", () => {
   const key = "testKey";
-  const mockData = { data: "test" };
+  const episodesKey = "123";
+  const mockPodcastId = "1234";
+  const mockPodcastData = { data: "podcastTest" };
+  const mockEpisodesData = { data: "EpisodeTest" };
   const mockFetchFunction = jest.fn();
   let setIsLoading: jest.Mock;
 
   beforeEach(() => {
     setIsLoading = jest.fn();
-    (useLoading as jest.Mock).mockReturnValue({ setIsLoading });
 
+    (useLoading as jest.Mock).mockReturnValue({ setIsLoading });
     // Clear localStorage and mock function calls before each test
     localStorage.clear();
     mockFetchFunction.mockClear();
+    resetStore();
   });
 
-  test("should fetch and store data if no cache exists", async () => {
-    mockFetchFunction.mockResolvedValue(mockData);
+  test("should fetch and store podecast data if no cache exists", async () => {
+    mockFetchFunction.mockResolvedValue(mockPodcastData);
 
-    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
-
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl", "podcasts")} />
+      </Provider>
+    );
     expect(setIsLoading).toHaveBeenCalledWith(true);
 
     await waitFor(() => {
-      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockData));
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockPodcastData));
     });
     expect(mockFetchFunction).toHaveBeenCalledTimes(1);
 
-    expect(localStorage.getItem(key)).toEqual(JSON.stringify(mockData));
+    expect(localStorage.getItem(key)).toEqual(JSON.stringify(mockPodcastData));
 
     expect(setIsLoading).toHaveBeenCalledWith(false);
   });
 
-  test("should return cached data if it has not expired", async () => {
-    localStorage.setItem(key, JSON.stringify(mockData));
+  test("should return cached podcasts data if it has not expired", async () => {
+    localStorage.setItem(key, JSON.stringify(mockPodcastData));
     localStorage.setItem(`${key}_date`, new Date().toISOString());
 
-    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl", "podcasts")} />
+      </Provider>
+    );
 
-    expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockData));
+    expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockPodcastData));
+
+    expect(mockFetchFunction).not.toHaveBeenCalled();
+
+    expect(setIsLoading).toHaveBeenCalledWith(false);
+  });
+  test("should fetch new podcasts data if the cache has expired", async () => {
+    const expiredDate = new Date(Date.now() - CACHE_TIME - 1000).toISOString();
+
+    localStorage.setItem(key, JSON.stringify(mockPodcastData));
+    localStorage.setItem(`${key}_date`, expiredDate);
+
+    const newMockData = { data: "newData" };
+    mockFetchFunction.mockResolvedValue(newMockData);
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl", "podcasts")} />
+      </Provider>
+    );
+
+    expect(setIsLoading).toHaveBeenCalledWith(true);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(newMockData));
+      expect(mockFetchFunction).toHaveBeenCalledTimes(1);
+
+      expect(localStorage.getItem(key)).toEqual(JSON.stringify(newMockData));
+
+      expect(setIsLoading).toHaveBeenCalledWith(false);
+    });
+  });
+
+  test("should fetch and store episodes data if no cache exists", async () => {
+    mockFetchFunction.mockResolvedValue(mockEpisodesData);
+
+    render(
+      <Provider store={store}>
+        <HookWrapper
+          hook={() =>
+            useCache(episodesKey, mockFetchFunction, "testUrl", "episodes", mockPodcastId)
+          }
+        />
+      </Provider>
+    );
+
+    expect(setIsLoading).toHaveBeenCalledWith(true);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockEpisodesData));
+    });
+    expect(mockFetchFunction).toHaveBeenCalledTimes(1);
+
+    expect(localStorage.getItem(episodesKey)).toEqual(JSON.stringify(mockEpisodesData));
+
+    expect(setIsLoading).toHaveBeenCalledWith(false);
+  });
+  test("should return cached episodes data if it has not expired", async () => {
+    localStorage.setItem(episodesKey, JSON.stringify(mockEpisodesData));
+    localStorage.setItem(`${episodesKey}_date`, new Date().toISOString());
+
+    render(
+      <Provider store={store}>
+        <HookWrapper
+          hook={() =>
+            useCache(episodesKey, mockFetchFunction, "testUrl", "episodes", mockPodcastId)
+          }
+        />
+      </Provider>
+    );
+
+    expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(mockEpisodesData));
 
     expect(mockFetchFunction).not.toHaveBeenCalled();
 
     expect(setIsLoading).toHaveBeenCalledWith(false);
   });
 
-  test("should fetch new data if the cache has expired", async () => {
+  test("should fetch new episodes data if the cache has expired", async () => {
     const expiredDate = new Date(Date.now() - CACHE_TIME - 1000).toISOString();
 
-    localStorage.setItem(key, JSON.stringify(mockData));
-    localStorage.setItem(`${key}_date`, expiredDate);
+    localStorage.setItem(episodesKey, JSON.stringify(mockEpisodesData));
+    localStorage.setItem(`${episodesKey}_date`, expiredDate);
 
     const newMockData = { data: "newData" };
     mockFetchFunction.mockResolvedValue(newMockData);
 
-    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
+    render(
+      <Provider store={store}>
+        <HookWrapper
+          hook={() =>
+            useCache(episodesKey, mockFetchFunction, "testUrl", "episodes", mockPodcastId)
+          }
+        />
+      </Provider>
+    );
 
     expect(setIsLoading).toHaveBeenCalledWith(true);
 
     await waitFor(() => {
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify(newMockData));
+      expect(mockFetchFunction).toHaveBeenCalledTimes(1);
+
+      expect(localStorage.getItem(episodesKey)).toEqual(JSON.stringify(newMockData));
+
+      expect(setIsLoading).toHaveBeenCalledWith(false);
     });
-
-    expect(mockFetchFunction).toHaveBeenCalledTimes(1);
-
-    expect(localStorage.getItem(key)).toEqual(JSON.stringify(newMockData));
-
-    expect(setIsLoading).toHaveBeenCalledWith(false);
   });
 
   test("should handle fetch error", async () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
     mockFetchFunction.mockRejectedValue(new Error("Fetch failed"));
 
-    render(<HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl")} />);
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl", "podcasts")} />
+      </Provider>
+    );
 
     expect(setIsLoading).toHaveBeenCalledWith(true);
 
     await waitFor(() => {
-      expect(screen.getByTestId("result").textContent).toEqual("null");
+      expect(screen.getByTestId("result").textContent).toEqual("{}");
     });
 
     expect(setIsLoading).toHaveBeenCalledWith(false);
+    expect(consoleSpy).toHaveBeenCalledWith("Failed to fetch data", expect.any(Error));
     consoleSpy.mockRestore();
+  });
+
+  test("should return null if podcastId is not provided for episodes", async () => {
+    render(
+      <Provider store={store}>
+        <HookWrapper
+          hook={() => useCache("episodesKey", mockFetchFunction, "testUrl", "episodes")}
+        />
+      </Provider>
+    );
+
+    expect(screen.getByTestId("result").textContent).toEqual("null");
+  });
+
+  test("should return null if cacheType is 'episodes' but podcastId is not provided", async () => {
+    mockFetchFunction.mockResolvedValue(mockEpisodesData);
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl", "episodes", "")} />
+      </Provider>
+    );
+
+    expect(screen.getByTestId("result").textContent).toEqual("null");
+  });
+
+  test("should return null if cacheType is 'episodes' but podcastId is missing or invalid", async () => {
+    const validDate = new Date().toISOString();
+    localStorage.setItem(episodesKey, JSON.stringify(mockEpisodesData));
+    localStorage.setItem(`${episodesKey}_date`, validDate);
+
+    render(
+      <Provider store={store}>
+        <HookWrapper
+          hook={() => useCache(episodesKey, mockFetchFunction, "testUrl", "episodes", "")}
+        />
+      </Provider>
+    );
+
+    expect(screen.getByTestId("result").textContent).toEqual("null");
+
+    expect(mockFetchFunction).not.toHaveBeenCalled();
+
+    expect(setIsLoading).toHaveBeenCalledWith(false);
   });
 });

@@ -1,4 +1,4 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
+import { render, screen, act, fireEvent, renderHook } from "@testing-library/react";
 import { LoadingProvider, useLoading } from "./LoadingContext";
 import { LoadingContextType } from "../types";
 
@@ -39,5 +39,15 @@ describe("LoadingContext", () => {
     });
 
     expect(await screen.findByText("Loading: Yes")).toBeInTheDocument();
+  });
+
+  test("throws error when used outside LoadingProvider", () => {
+    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    expect(() => renderHook(() => useLoading())).toThrow(
+      "useLoading must be used within a LoadingProvider"
+    );
+
+    consoleError.mockRestore();
   });
 });
