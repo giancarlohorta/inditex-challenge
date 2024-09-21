@@ -34,10 +34,10 @@ export interface NormalizedPodcast {
 }
 
 export interface RawEpisodeData {
-  trackId?: number;
-  trackName?: string;
+  trackId: number;
+  trackName: string;
   trackTimeMillis?: number;
-  releaseDate?: string;
+  releaseDate: string;
   episodeUrl?: string;
   description?: string;
   [key: string]: any;

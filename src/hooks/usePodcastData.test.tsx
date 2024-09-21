@@ -21,7 +21,6 @@ describe("usePodcastData", () => {
   const podcastId = "1535809341";
 
   beforeEach(() => {
-    // Limpar o localStorage e o estado da store antes de cada teste
     localStorage.clear();
     resetStore();
   });
@@ -138,6 +137,55 @@ describe("usePodcastData", () => {
       expect(screen.getByTestId("result").textContent).toEqual(
         JSON.stringify(mockNormalizedPodcast)
       );
+    });
+  });
+
+  test("should handle empty or invalid data in localStorage gracefully", async () => {
+    localStorage.setItem(KEY_PODCASTS, JSON.stringify(null));
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
+    });
+  });
+
+  test("should set podcastData to an empty object if podcastId is not found in podcastsData", async () => {
+    store.dispatch(
+      setPodcasts({
+        feed: {
+          entry: [
+            {
+              id: { attributes: { "im:id": "5678" } },
+              "im:name": "Podcast 1",
+              "im:artist": { label: "Author 1" },
+              "im:image": [{ label: "test" }, { label: "test" }, { label: "test" }],
+              summary: { label: "description" }
+            },
+            {
+              id: { attributes: { "im:id": "91011" } },
+              "im:name": "Podcast 2",
+              "im:artist": { label: "Author 2" },
+              "im:image": [{ label: "test" }, { label: "test" }, { label: "test" }],
+              summary: { label: "description" }
+            }
+          ]
+        }
+      })
+    );
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => usePodcastData(podcastId)} />
+      </Provider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
     });
   });
 });

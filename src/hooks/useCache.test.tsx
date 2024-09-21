@@ -198,4 +198,49 @@ describe("useCache", () => {
     expect(consoleSpy).toHaveBeenCalledWith("Failed to fetch data", expect.any(Error));
     consoleSpy.mockRestore();
   });
+
+  test("should return null if podcastId is not provided for episodes", async () => {
+    render(
+      <Provider store={store}>
+        <HookWrapper
+          hook={() => useCache("episodesKey", mockFetchFunction, "testUrl", "episodes")}
+        />
+      </Provider>
+    );
+
+    expect(screen.getByTestId("result").textContent).toEqual("null");
+  });
+
+  test("should return null if cacheType is 'episodes' but podcastId is not provided", async () => {
+    mockFetchFunction.mockResolvedValue(mockEpisodesData);
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useCache(key, mockFetchFunction, "testUrl", "episodes", "")} />
+      </Provider>
+    );
+
+    // Esperamos que o retorno seja null porque o podcastId não foi fornecido
+    expect(screen.getByTestId("result").textContent).toEqual("null");
+  });
+
+  test("should return null if cacheType is 'episodes' but podcastId is missing or invalid", async () => {
+    const validDate = new Date().toISOString();
+    localStorage.setItem(episodesKey, JSON.stringify(mockEpisodesData));
+    localStorage.setItem(`${episodesKey}_date`, validDate);
+
+    render(
+      <Provider store={store}>
+        <HookWrapper
+          hook={() => useCache(episodesKey, mockFetchFunction, "testUrl", "episodes", "")}
+        />
+      </Provider>
+    );
+
+    expect(screen.getByTestId("result").textContent).toEqual("null");
+
+    expect(mockFetchFunction).not.toHaveBeenCalled();
+
+    expect(setIsLoading).toHaveBeenCalledWith(false);
+  });
 });

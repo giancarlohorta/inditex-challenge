@@ -117,4 +117,62 @@ describe("useEpisodeData", () => {
       );
     });
   });
+
+  test("should handle dataPodcasts without results gracefully", async () => {
+    // Simulando um objeto que não contém o campo `results`
+    const invalidData = { someOtherField: "invalid data" };
+    localStorage.setItem(`${podcastId}Data`, JSON.stringify(invalidData));
+
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useEpisodeData(podcastId, episodeId)} />
+      </Provider>
+    );
+
+    await waitFor(() => {
+      // O hook deve retornar um objeto vazio já que `results` está ausente
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
+    });
+  });
+
+  test("should set episodeData to an empty object if episodeId is not found in episodesData", async () => {
+    // Simular episodesData no Redux com episódios que não contêm o episodeId esperado
+    store.dispatch(
+      setEpisodes({
+        podcastId,
+        data: {
+          results: [
+            {
+              trackId: 5678,
+              trackName: "Episode 1",
+              trackTimeMillis: 300000,
+              releaseDate: "2023-09-20",
+              episodeUrl: "http://example.com/episode1",
+              description: "Description of episode 1"
+            },
+            {
+              trackId: 91011,
+              trackName: "Episode 2",
+              trackTimeMillis: 350000,
+              releaseDate: "2023-09-21",
+              episodeUrl: "http://example.com/episode2",
+              description: "Description of episode 2"
+            }
+          ]
+        }
+      })
+    );
+
+    // Renderizar o hook dentro de um componente de teste
+    render(
+      <Provider store={store}>
+        <HookWrapper hook={() => useEpisodeData(podcastId, episodeId)} />
+      </Provider>
+    );
+
+    // Esperar que o estado do episodeData seja um objeto vazio
+    await waitFor(() => {
+      expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
+    });
+  });
 });
