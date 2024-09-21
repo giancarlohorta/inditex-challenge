@@ -119,7 +119,6 @@ describe("useEpisodeData", () => {
   });
 
   test("should handle dataPodcasts without results gracefully", async () => {
-    // Simulando um objeto que não contém o campo `results`
     const invalidData = { someOtherField: "invalid data" };
     localStorage.setItem(`${podcastId}Data`, JSON.stringify(invalidData));
 
@@ -130,13 +129,11 @@ describe("useEpisodeData", () => {
     );
 
     await waitFor(() => {
-      // O hook deve retornar um objeto vazio já que `results` está ausente
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
     });
   });
 
   test("should set episodeData to an empty object if episodeId is not found in episodesData", async () => {
-    // Simular episodesData no Redux com episódios que não contêm o episodeId esperado
     store.dispatch(
       setEpisodes({
         podcastId,
@@ -163,14 +160,12 @@ describe("useEpisodeData", () => {
       })
     );
 
-    // Renderizar o hook dentro de um componente de teste
     render(
       <Provider store={store}>
         <HookWrapper hook={() => useEpisodeData(podcastId, episodeId)} />
       </Provider>
     );
 
-    // Esperar que o estado do episodeData seja um objeto vazio
     await waitFor(() => {
       expect(screen.getByTestId("result").textContent).toEqual(JSON.stringify({}));
     });

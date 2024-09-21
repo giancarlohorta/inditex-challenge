@@ -98,7 +98,7 @@ describe("Episode Page", () => {
   test("should render 'Audio unavailable' if episodeUrl is not provided", async () => {
     const mockWithoutAudio = {
       ...mockEpisodes.results.find(({ trackId }) => trackId === Number(episodeId)),
-      episodeUrl: "" // Simulando que não há URL de áudio disponível
+      episodeUrl: ""
     };
     const mockEpisodesNoAudio = {
       resultCount: 12,
