@@ -16,9 +16,16 @@ const useCache = (
   const dispatch = useDispatch();
   const { setIsLoading } = useLoading();
 
-  const cacheData = useSelector((state: RootState) =>
-    cacheType === "podcasts" ? state.podcasts.data : state.episodes.list[podcastId || ""]?.data
-  );
+  const cacheData = useSelector((state: RootState) => {
+    if (cacheType === "podcasts") {
+      return state.podcasts.data || null;
+    }
+
+    if (!podcastId) return null;
+
+    const episodeData = state.episodes.list[podcastId];
+    return episodeData && episodeData.data ? episodeData.data : null;
+  });
 
   useEffect(() => {
     const fetchData = async () => {

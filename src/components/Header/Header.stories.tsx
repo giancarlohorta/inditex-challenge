@@ -3,6 +3,7 @@ import { Meta, StoryFn } from "@storybook/react";
 import { MemoryRouter } from "react-router-dom";
 import { LoadingContext } from "../../context/LoadingContext";
 import { LoadingContextType } from "../../types";
+import { useState } from "react";
 
 export default {
   title: "Components/Header",
@@ -27,13 +28,16 @@ export default {
   }
 } as Meta<LoadingContextType>;
 
-const MockLoadingProvider: React.FC<{ isLoading: boolean; children: React.ReactNode }> = ({
+const MockLoadingProvider = ({
   isLoading,
   children
+}: {
+  isLoading: boolean;
+  children: React.ReactNode;
 }) => {
-  const setIsLoading = () => {};
+  const [isLoadingData, setIsLoadingData] = useState(isLoading);
   return (
-    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+    <LoadingContext.Provider value={{ isLoading: isLoadingData, setIsLoading: setIsLoadingData }}>
       {children}
     </LoadingContext.Provider>
   );

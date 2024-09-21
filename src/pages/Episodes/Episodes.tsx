@@ -76,11 +76,11 @@ const Episodes = () => {
           {normalizedEpisodesData?.map(({ name, duration, releaseDate, id }) => {
             return (
               <tr key={id}>
-                <th>
+                <td>
                   <Link to={`/podcast/${podcastId}/episode/${id}`}>{name}</Link>
-                </th>
-                <th>{formatReleaseDate(releaseDate)}</th>
-                {duration && <th>{millisToHoursMinutesAndSeconds(duration)}</th>}
+                </td>
+                <td>{formatReleaseDate(releaseDate)}</td>
+                {duration ? <td>{millisToHoursMinutesAndSeconds(duration)}</td> : <td></td>}
               </tr>
             );
           })}

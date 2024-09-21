@@ -94,4 +94,31 @@ describe("Episode Page", () => {
 
     expect(screen.getByText("Loading episode data...")).toBeInTheDocument();
   });
+
+  test("should render 'Audio unavailable' if episodeUrl is not provided", async () => {
+    const mockWithoutAudio = {
+      ...mockEpisodes.results.find(({ trackId }) => trackId === Number(episodeId)),
+      episodeUrl: "" // Simulando que não há URL de áudio disponível
+    };
+    const mockEpisodesNoAudio = {
+      resultCount: 12,
+      results: [
+        ...mockEpisodes.results.filter(({ trackId }) => trackId !== Number(episodeId)),
+        { ...mockWithoutAudio }
+      ]
+    };
+
+    localStorage.setItem(`${podcastId}Data`, JSON.stringify(mockEpisodesNoAudio));
+
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Episode />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    const audioUnavailableText = await screen.findByText("Audio unavailable");
+    expect(audioUnavailableText).toBeInTheDocument();
+  });
 });
