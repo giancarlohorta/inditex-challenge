@@ -68,7 +68,6 @@ describe("usePodcastData", () => {
   });
 
   test("should return an empty object if podcast is not found in the normalized data", async () => {
-    // Definir mock de dados no localStorage sem o podcastId esperado
     localStorage.setItem(
       KEY_PODCASTS,
       JSON.stringify({

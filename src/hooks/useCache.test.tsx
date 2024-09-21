@@ -220,7 +220,6 @@ describe("useCache", () => {
       </Provider>
     );
 
-    // Esperamos que o retorno seja null porque o podcastId não foi fornecido
     expect(screen.getByTestId("result").textContent).toEqual("null");
   });
 

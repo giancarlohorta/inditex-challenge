@@ -42,10 +42,12 @@ describe("LoadingContext", () => {
   });
 
   test("throws error when used outside LoadingProvider", () => {
-    try {
-      renderHook(() => useLoading());
-    } catch (error) {
-      expect(error).toEqual(Error("useLoading must be used within a LoadingProvider"));
-    }
+    const consoleError = jest.spyOn(console, "error").mockImplementation(() => {});
+
+    expect(() => renderHook(() => useLoading())).toThrow(
+      "useLoading must be used within a LoadingProvider"
+    );
+
+    consoleError.mockRestore();
   });
 });
