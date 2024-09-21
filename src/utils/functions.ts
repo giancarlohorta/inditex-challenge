@@ -82,3 +82,11 @@ export const resetStore = () => {
   store.dispatch(resetEpisodes());
   store.dispatch(resetPodcasts());
 };
+
+export const isNormalizedPodcast = (data: any): data is NormalizedPodcast => {
+  return data && typeof data === "object" && "author" in data && "id" in data;
+};
+
+export const isNormalizedEpisode = (data: any): data is NormalizedEpisode => {
+  return data && typeof data === "object" && "name" in data && "description" in data;
+};

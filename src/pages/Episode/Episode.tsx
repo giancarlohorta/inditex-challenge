@@ -2,10 +2,7 @@ import { useParams } from "react-router-dom";
 import useEpisodeData from "../../hooks/useEpisodeData";
 import styles from "./Episode.module.css";
 import { NormalizedEpisode } from "../../types";
-
-const isNormalizedEpisode = (data: any): data is NormalizedEpisode => {
-  return data && typeof data === "object" && "name" in data && "description" in data;
-};
+import { isNormalizedEpisode } from "../../utils/functions";
 
 const Episode = () => {
   const { podcastId, episodeId } = useParams<{ podcastId: string; episodeId: string }>();

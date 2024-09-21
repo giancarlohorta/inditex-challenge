@@ -4,11 +4,7 @@ import styles from "./Podcast.module.css";
 import Episodes from "../Episodes";
 import Episode from "../Episode";
 import { Route, Routes, useParams } from "react-router-dom";
-import { NormalizedPodcast } from "../../types";
-
-const isNormalizedPodcast = (data: any): data is NormalizedPodcast => {
-  return data && typeof data === "object" && "author" in data && "id" in data;
-};
+import { isNormalizedPodcast } from "../../utils/functions";
 
 const Podcast = () => {
   const { podcastId } = useParams<{ podcastId: string }>();
