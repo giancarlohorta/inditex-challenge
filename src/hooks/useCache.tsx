@@ -43,25 +43,25 @@ const useCache = (
         }
 
         return JSON.parse(storedData);
-      }
+      } else {
+        try {
+          const data = await fetchFunction();
 
-      try {
-        const data = await fetchFunction();
+          if (cacheType === "podcasts") {
+            dispatch(setPodcasts(data));
+          } else if (cacheType === "episodes" && podcastId) {
+            dispatch(setEpisodes({ podcastId, data }));
+          }
 
-        if (cacheType === "podcasts") {
-          dispatch(setPodcasts(data));
-        } else if (cacheType === "episodes" && podcastId) {
-          dispatch(setEpisodes({ podcastId, data }));
+          saveToCache(key, data);
+
+          return data;
+        } catch (error) {
+          console.error("Failed to fetch data", error);
+          return null;
+        } finally {
+          setIsLoading(false);
         }
-
-        saveToCache(key, data);
-
-        return data;
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-        return null;
-      } finally {
-        setIsLoading(false);
       }
     };
 
